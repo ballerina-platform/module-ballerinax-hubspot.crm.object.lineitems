@@ -98,12 +98,7 @@ curl --request POST \
   --header 'content-type: application/x-www-form-urlencoded' \
   --data 'grant_type=authorization_code&code=<code>&redirect_uri=http://localhost:9090&client_id=<client_id>&client_secret=<client_secret>'
 ```
-* Then execute this in terminal. If successful, you'll receive a JSON response containing `access_token` and `refresh_token`.
-
-
-## Configure the module
-
-1. Create `Config.toml` file under ballerina/tests directory and add your credentials there
+* Then execute this in terminal. If successful, you'll receive a JSON response containing `access_token` and `refresh_token`.Use the tokens to authorize client.
 
 
 

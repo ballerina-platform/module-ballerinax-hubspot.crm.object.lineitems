@@ -8,7 +8,6 @@
 
 # Overview
 
-[//]: # (TODO: Add overview mentioning the purpose of the module, supported REST API versions, and other high-level details.)
 [HubSpot](https://www.hubspot.com/our-story) is  a comprehensive inbound marketing, sales, and customer service platform that provides tools for CRM, content management, email marketing and analytics. It empowers businesses to grow and engage with customers more effectively.
 
 The `ballerinax-hubspot.crm.object.lineitems` [module](https://developers.hubspot.com/docs/guides/api/crm/objects/line-items)  is designed for the developers to use the line items API to add instances of products to deals and quotes. Clients can create line items from existing products or create them as custom line items with no product attached. This allows clients to connect and interact with [HubSpot API](https://developers.hubspot.com/docs/reference/api/overview) endpoints, specifically based on [HubSpot API v3](https://developers.hubspot.com/changelog/crm-api-v3-is-generally-available).
@@ -16,7 +15,6 @@ The `ballerinax-hubspot.crm.object.lineitems` [module](https://developers.hubspo
 
 # Setup guide
 
-[//]: # (TODO: Add detailed steps to obtain credentials and configure the module.)
 
 You need a [HubSpot developer account](https://developers.hubspot.com/get-started) with an [app](https://developers.hubspot.com/docs/guides/apps/public-apps/overview) to use HubSpot connectors.
 To obtain an authentication token for your HubSpot developer account, you can use OAuth for public apps. 
@@ -107,6 +105,81 @@ curl --request POST \
 # Quickstart
 
 [//]: # (TODO: Add a quickstart guide to demonstrate a basic functionality of the module, including sample code snippets.)
+To use the `HubSpot CRM Object Line items` connector in your Ballerina application, update the `.bal` file as follows:
+
+### Step 1: Import the module
+
+Import the `hubspot.crm.object.lineitems` module and `oauth2` module.
+
+```ballerina
+import ballerinax/hubspot.crm.object.lineitems as hslineitems;
+import ballerina/oauth2;
+```
+
+### Step 2: Instantiate a new connector
+
+1. Create a `Config.toml` file and, configure the obtained credentials obtained in the above steps as follows:
+
+   ```toml
+    clientId = <Client Id>
+    clientSecret = <Client Secret>
+    refreshToken = <Refresh Token>
+   ```
+
+2. Instantiate a `OAuth2RefreshTokenGrantConfig` with the obtained credentials and initialize the connector with it.
+
+    ```ballerina
+   configurable string clientId = ?;
+   configurable string clientSecret = ?;
+   configurable string refreshToken = ?;
+
+   OAuth2RefreshTokenGrantConfig auth = {
+      clientId,
+      clientSecret,
+      refreshToken,
+      credentialBearer: oauth2:POST_BODY_BEARER 
+   };
+
+   ConnectionConfig config = {auth};
+   final Client HubSpotClient = check new Client(config, "https://api.hubapi.com");
+   ```
+
+### Step 3: Invoke the connector operation
+
+Now, utilize the available connector operations. A sample usecase is shown below.
+
+#### Create a New Ticket
+
+```ballerina
+public function main() returns error? {
+    SimplePublicObjectInputForCreate payload = {
+
+    "associations": [
+    {
+        "types": [
+        {
+          "associationCategory": "HUBSPOT_DEFINED",
+          "associationTypeId": 20
+        }
+      ],
+      "to": {
+        "id": "31232284502"
+      }
+      
+    }
+  ],"objectWriteTraceId": "2",
+  "properties": {
+    "price": "400.00",
+    "quantity": "10",
+    "name": "Item 6"
+  }
+  
+};
+    SimplePublicObject response = check HubSpotClient->/crm/v3/objects/line_items.post(payload);
+    io:println(response);
+    return;
+}
+```
 
 # Examples
 

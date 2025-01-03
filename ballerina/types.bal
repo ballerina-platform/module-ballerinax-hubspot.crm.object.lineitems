@@ -69,6 +69,13 @@ public type BatchResponseSimplePublicUpsertObjectWithErrors record {
     "PENDING"|"PROCESSING"|"CANCELED"|"COMPLETE" status;
 };
 
+public type BatchReadInputSimplePublicObjectId record {
+    string[] propertiesWithHistory;
+    string idProperty?;
+    SimplePublicObjectId[] inputs;
+    string[] properties;
+};
+
 public type BatchResponseSimplePublicUpsertObject record {
     string completedAt;
     string requestedAt?;
@@ -78,13 +85,6 @@ public type BatchResponseSimplePublicUpsertObject record {
     "PENDING"|"PROCESSING"|"CANCELED"|"COMPLETE" status;
 };
 
-public type BatchReadInputSimplePublicObjectId record {
-    string[] propertiesWithHistory;
-    string idProperty?;
-    SimplePublicObjectId[] inputs;
-    string[] properties;
-};
-
 public type ValueWithTimestamp record {
     string sourceId?;
     string sourceType;
@@ -92,6 +92,10 @@ public type ValueWithTimestamp record {
     int:Signed32 updatedByUserId?;
     string value;
     string timestamp;
+};
+
+public type BatchInputSimplePublicObjectId record {
+    SimplePublicObjectId[] inputs;
 };
 
 # Represents the Queries record for the operation: get-/crm/v3/objects/line_items_getPage
@@ -108,10 +112,6 @@ public type GetCrmV3ObjectsLine_items_getpageQueries record {
     string after?;
     # A comma separated list of the properties to be returned in the response. If any of the specified properties are not present on the requested object(s), they will be ignored.
     string[] properties?;
-};
-
-public type BatchInputSimplePublicObjectId record {
-    SimplePublicObjectId[] inputs;
 };
 
 # OAuth2 Refresh Token Grant Configs
@@ -281,12 +281,12 @@ public type PreviousPage record {
     string link?;
 };
 
-public type BatchInputSimplePublicObjectInputForCreate record {
-    SimplePublicObjectInputForCreate[] inputs;
-};
-
 public type BatchInputSimplePublicObjectBatchInput record {
     SimplePublicObjectBatchInput[] inputs;
+};
+
+public type BatchInputSimplePublicObjectInputForCreate record {
+    SimplePublicObjectInputForCreate[] inputs;
 };
 
 # Represents the Queries record for the operation: get-/crm/v3/objects/line_items/{lineItemId}_getById

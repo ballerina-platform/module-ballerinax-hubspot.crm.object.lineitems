@@ -19,7 +19,7 @@
       "x-hubspot-introduction" : "Use the line items API to add instances of products to deals and quotes. You can create line items from existing products or create them as custom line items with no product attached."
     },
     "servers" : [ {
-      "url" : "https://api.hubapi.com"
+      "url" : "https://api.hubapi.com/crm/v3/objects/line_items"
     } ],
     "tags" : [ {
       "name" : "Batch"
@@ -29,7 +29,7 @@
       "name" : "Search"
     } ],
     "paths" : {
-      "/crm/v3/objects/line_items/batch/read" : {
+      "/batch/read" : {
         "post" : {
           "tags" : [ "Batch" ],
           "summary" : "Read a batch of line items by internal ID, or unique property values",
@@ -92,7 +92,7 @@
           } ]
         }
       },
-      "/crm/v3/objects/line_items/{lineItemId}" : {
+      "/{lineItemId}" : {
         "get" : {
           "tags" : [ "Basic" ],
           "summary" : "Read",
@@ -288,7 +288,7 @@
           } ]
         }
       },
-      "/crm/v3/objects/line_items/batch/archive" : {
+      "/batch/archive" : {
         "post" : {
           "tags" : [ "Batch" ],
           "summary" : "Archive a batch of line items by ID",
@@ -324,7 +324,7 @@
           } ]
         }
       },
-      "/crm/v3/objects/line_items/batch/create" : {
+      "/batch/create" : {
         "post" : {
           "tags" : [ "Batch" ],
           "summary" : "Create a batch of line items",
@@ -376,7 +376,7 @@
           } ]
         }
       },
-      "/crm/v3/objects/line_items/batch/update" : {
+      "/batch/update" : {
         "post" : {
           "tags" : [ "Batch" ],
           "summary" : "Update a batch of line items by internal ID, or unique property values",
@@ -428,7 +428,7 @@
           } ]
         }
       },
-      "/crm/v3/objects/line_items" : {
+      "/" : {
         "get" : {
           "tags" : [ "Basic" ],
           "summary" : "List",
@@ -574,7 +574,7 @@
           } ]
         }
       },
-      "/crm/v3/objects/line_items/batch/upsert" : {
+      "/batch/upsert" : {
         "post" : {
           "tags" : [ "Batch" ],
           "summary" : "Create or update a batch of line items by unique property values",
@@ -627,7 +627,7 @@
           } ]
         }
       },
-      "/crm/v3/objects/line_items/search" : {
+      "/search" : {
         "post" : {
           "tags" : [ "Search" ],
           "operationId" : "post-/crm/v3/objects/line_items/search_doSearch",

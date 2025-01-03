@@ -8,10 +8,9 @@
 
 # Overview
 
-[HubSpot](https://www.hubspot.com/our-story) is  a comprehensive inbound marketing, sales, and customer service platform that provides tools for CRM, content management, email marketing and analytics. It empowers businesses to grow and engage with customers more effectively.
+[HubSpot](https://www.hubspot.com/our-story) is an AI-powered customer relationship management (CRM) platform. 
 
-The `ballerinax-hubspot.crm.object.lineitems` [module](https://developers.hubspot.com/docs/guides/api/crm/objects/line-items)  is designed for the developers to use the line items API to add instances of products to deals and quotes. Clients can create line items from existing products or create them as custom line items with no product attached. This allows clients to connect and interact with [HubSpot API](https://developers.hubspot.com/docs/reference/api/overview) endpoints, specifically based on [HubSpot API v3](https://developers.hubspot.com/changelog/crm-api-v3-is-generally-available).
-
+The `ballerinax/hubspot.crm.object.lineitems`  offers APIs to connect and interact with the [HubSpot API](https://developers.hubspot.com/docs/reference/api/overview) endpoints, specifically based on the [API Docs](https://developers.hubspot.com/docs/guides/api/crm/objects/line-items).
 
 # Setup guide
 

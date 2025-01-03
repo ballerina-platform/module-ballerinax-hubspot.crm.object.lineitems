@@ -25,7 +25,7 @@ import ballerina/http;
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
-configurable string serviceUrl = "https://api.hubapi.com";
+configurable string serviceUrl = "https://api.hubapi.com/crm/v3/objects/line_items";
 
 OAuth2RefreshTokenGrantConfig auth = {
        clientId: clientId,
@@ -49,7 +49,7 @@ final Client hubspot = check new Client(config, serviceUrl);
 }
 
 isolated function testPostLineofItems() returns error? {
-    SimplePublicObject response = check hubspot->/crm/v3/objects/line_items.post(
+    SimplePublicObject response = check hubspot->/.post(
         payload = {
 
     "associations": [
@@ -67,9 +67,9 @@ isolated function testPostLineofItems() returns error? {
     }
   ],"objectWriteTraceId": "2",
   "properties": {
-    "price": "400.00",
-    "quantity": "10",
-    "name": "Item 6"
+    "price": "4000.00",
+    "quantity": "8",
+    "name": "Item 7"
   }
   
 }
@@ -86,7 +86,7 @@ isolated function testPostLineofItems() returns error? {
 }
 
 isolated function testGetLineofItems() returns error? {
-    CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hubspot->/crm/v3/objects/line_items.get(
+    CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hubspot->/.get(
     );
     io:println(response);   
     }
@@ -100,7 +100,7 @@ isolated function testGetLineofItems() returns error? {
 }
 
 isolated function testGetlineItem() returns error? {
-    SimplePublicObjectWithAssociations response = check hubspot->/crm/v3/objects/line_items/["27063341718"].get();
+    SimplePublicObjectWithAssociations response = check hubspot->/["27063341718"].get();
     io:println(response);   
 }
 
@@ -112,13 +112,13 @@ isolated function testGetlineItem() returns error? {
 }
 
 isolated function testupdateProperties() returns error? {
-    SimplePublicObject response = check hubspot->/crm/v3/objects/line_items/["27063341718"].patch(
+    SimplePublicObject response = check hubspot->/["27063341718"].patch(
         payload = {
             "objectWriteTraceId": "2",
   "properties": {
-    "price": "150.00",
-    "quantity": "2",
-    "name": "Updated standalone line item"
+    "price": "154.00",
+    "quantity": "1",
+    "name": "Updated line item"
   }
         });
     io:println(response);   
@@ -131,7 +131,7 @@ isolated function testupdateProperties() returns error? {
 }
 
 isolated function testDeleteLineItem() returns error? {
-    http:Response response = check hubspot->/crm/v3/objects/line_items/["27101276519"].delete();
+    http:Response response = check hubspot->/["27101276519"].delete();
     io:println(response);   
 }
 
@@ -142,7 +142,7 @@ isolated function testDeleteLineItem() returns error? {
 }
 
 isolated function testArchivebatchofLineItem() returns error? {
-    http:Response response = check hubspot->/crm/v3/objects/line_items/batch/archive.post(
+    http:Response response = check hubspot->/batch/archive.post(
         payload ={
             "inputs": [
                 {
@@ -165,7 +165,7 @@ isolated function testArchivebatchofLineItem() returns error? {
 }
 
 isolated function testCreatebatchofLineItems() returns error? {
-    BatchResponseSimplePublicObject response = check hubspot->/crm/v3/objects/line_items/batch/create.post(
+    BatchResponseSimplePublicObject response = check hubspot->/batch/create.post(
         payload = {
 
     "inputs": [
@@ -206,7 +206,7 @@ isolated function testCreatebatchofLineItems() returns error? {
 }
 
 isolated function testReadbatchofLineItems() returns error? {
-    BatchResponseSimplePublicObject response = check hubspot->/crm/v3/objects/line_items/batch/read.post(
+    BatchResponseSimplePublicObject response = check hubspot->/batch/read.post(
         payload = {
     "propertiesWithHistory": [
     "name"
@@ -234,14 +234,14 @@ isolated function testReadbatchofLineItems() returns error? {
 }
 
 isolated function testUpdatebatchofLineItems() returns error? {
-    BatchResponseSimplePublicObject response = check hubspot->/crm/v3/objects/line_items/batch/update.post(
+    BatchResponseSimplePublicObject response = check hubspot->/batch/update.post(
         payload = {
   "inputs": [
     {
       "id": "27078953355",
       "properties": {
-        "price": "350.00",
-        "quantity": "2",
+        "price": "450.00",
+        "quantity": "1",
         "name": "Updated Item 4"
       }
     }
@@ -261,7 +261,7 @@ isolated function testUpdatebatchofLineItems() returns error? {
 }
 
 isolated function testUpsertbatchofLineItems() returns error? {
-    BatchResponseSimplePublicUpsertObject|BatchResponseSimplePublicUpsertObjectWithErrors response = check hubspot->/crm/v3/objects/line_items/batch/upsert.post(
+    BatchResponseSimplePublicUpsertObject|BatchResponseSimplePublicUpsertObjectWithErrors response = check hubspot->/batch/upsert.post(
         payload = {
   inputs: [
     {
@@ -289,7 +289,7 @@ isolated function testUpsertbatchofLineItems() returns error? {
 }
 
 isolated function testSearchBatchofLineItems() returns error? {
-    CollectionResponseWithTotalSimplePublicObjectForwardPaging response = check hubspot->/crm/v3/objects/line_items/search.post(
+    CollectionResponseWithTotalSimplePublicObjectForwardPaging response = check hubspot->/search.post(
         payload = {
   "query": "Item",
   "limit": 5,

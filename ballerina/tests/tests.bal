@@ -17,15 +17,17 @@
 
 
 import ballerina/test;
-import ballerina/io;
 import ballerina/oauth2;
 import ballerina/http;
-// import ballerina/os;
 
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 configurable string serviceUrl = "https://api.hubapi.com/crm/v3/objects/line_items";
+
+//test variables
+string lineitem_id = "";
+string batch_id = "";
 
 OAuth2RefreshTokenGrantConfig auth = {
        clientId: clientId,
@@ -38,20 +40,24 @@ ConnectionConfig config = {auth};
 final Client hubspot = check new Client(config, serviceUrl);
 
 
-
+// get all line of items
+@test:Config {
+    groups: ["unit_tests"]
+}
+isolated function testGetLineofItems() returns error? {
+    CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hubspot->/.get(
+    );
+    test:assertTrue(response?.results != [], "Line items not found"); 
+    }
 
 
 // create line of items
-
 @test:Config {
-    groups: ["unit_tests"],
-    enable:false
+    groups: ["unit_tests"]
 }
-
-isolated function testPostLineofItems() returns error? {
+function testPostLineofItems() returns error? {
     SimplePublicObject response = check hubspot->/.post(
         payload = {
-
     "associations": [
     {
         "types": [
@@ -67,52 +73,39 @@ isolated function testPostLineofItems() returns error? {
     }
   ],"objectWriteTraceId": "2",
   "properties": {
-    "price": "4000.00",
+    "price": "400.00",
     "quantity": "8",
     "name": "Item 7"
   }
-  
 }
-    );
-    io:println(response);
-
+    ); 
+    test:assertTrue(response?.id != "","Line item creation failed");
+    test:assertEquals(response?.properties["name"] , "Item 7", "Name mismatched");
+    test:assertEquals(response?.properties["price"] , "400.00", "Price mismatched");
+    test:assertEquals(response?.properties["quantity"] , "8", "Quantity mismatched");
+    
+    lineitem_id = response.id;
 }
-
-
-// get line of items
-@test:Config {
-    groups: ["unit_tests"],
-    enable:false
-}
-
-isolated function testGetLineofItems() returns error? {
-    CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hubspot->/.get(
-    );
-    io:println(response);   
-    }
-
 
 
 // get line item by id
 @test:Config {
     groups: ["unit_tests"],
-    enable:false
+    dependsOn: [testPostLineofItems]
 }
-
-isolated function testGetlineItem() returns error? {
-    SimplePublicObjectWithAssociations response = check hubspot->/["27063341718"].get();
-    io:println(response);   
+function testGetlineItem() returns error? {
+    SimplePublicObjectWithAssociations response = check hubspot->/[lineitem_id].get();
+    test:assertTrue(response?.id == lineitem_id, "Line item not found");   
 }
 
 
 // update line item by id
 @test:Config {
     groups: ["unit_tests"],
-    enable:false
+    dependsOn: [testGetlineItem]
 }
-
-isolated function testupdateProperties() returns error? {
-    SimplePublicObject response = check hubspot->/["27063341718"].patch(
+function testUpdateProperties() returns error? {
+    SimplePublicObject response = check hubspot->/[lineitem_id].patch(
         payload = {
             "objectWriteTraceId": "2",
   "properties": {
@@ -121,50 +114,29 @@ isolated function testupdateProperties() returns error? {
     "name": "Updated line item"
   }
         });
-    io:println(response);   
+    test:assertTrue(response?.id == lineitem_id, "Line item not found");
+    test:assertEquals(response?.properties["name"] , "Updated line item", "Name mismatched");
+    test:assertEquals(response?.properties["price"] , "154.00", "Price mismatched");
+    test:assertEquals(response?.properties["quantity"] , "1", "Quantity mismatched");   
 }
+
 
 // Archive a line item
 @test:Config {
     groups: ["unit_tests"],
-    enable:false
+    dependsOn: [testUpdateProperties]
 }
-
-isolated function testDeleteLineItem() returns error? {
-    http:Response response = check hubspot->/["27101276519"].delete();
-    io:println(response);   
+function testDeleteLineItem() returns error? {
+    http:Response response = check hubspot->/[lineitem_id].delete();
+    test:assertTrue(response.statusCode == 204);   
 }
-
-// Archive a batch of line items
-@test:Config {
-    groups: ["unit_tests"],
-    enable:false
-}
-
-isolated function testArchivebatchofLineItem() returns error? {
-    http:Response response = check hubspot->/batch/archive.post(
-        payload ={
-            "inputs": [
-                {
-                    "id": "26757940030"
-                }
-            ]
-
-        }
-    );
-    io:println(response);   
-}
-
-
 
 
 // Create a batch of line items
 @test:Config {
-    groups: ["unit_tests"],
-    enable:false
+    groups: ["unit_tests"]
 }
-
-isolated function testCreatebatchofLineItems() returns error? {
+function testCreatebatchofLineItems() returns error? {
     BatchResponseSimplePublicObject response = check hubspot->/batch/create.post(
         payload = {
 
@@ -187,34 +159,35 @@ isolated function testCreatebatchofLineItems() returns error? {
       "properties": {
         "price": "400.00",
         "quantity": "1",
-        "name": "Item 5"
+        "name": "Item 6"
       }
     }
   ]
 }
     );
-    io:println(response);
-    
-
+    test:assertEquals(response?.status , "COMPLETE", "Batch creation failed");
+    test:assertTrue(response?.results != [], "Line items not found");
+    test:assertEquals(response?.results[0].properties["name"] , "Item 6", "Name mismatched");
+    test:assertEquals(response?.results[0].properties["price"] , "400.00", "Price mismatched");
+    test:assertEquals(response?.results[0].properties["quantity"] , "1", "Quantity mismatched");
+    batch_id = response.results[0].id;
 }
 
 
 // Read a batch of line items
 @test:Config {
     groups: ["unit_tests"],
-    enable:false
+    dependsOn: [testCreatebatchofLineItems]
 }
-
-isolated function testReadbatchofLineItems() returns error? {
+function testReadbatchofLineItems() returns error? {
     BatchResponseSimplePublicObject response = check hubspot->/batch/read.post(
         payload = {
     "propertiesWithHistory": [
     "name"
-  ],
-  
+  ], 
   "inputs": [
     {
-      "id": "27078953355"
+      "id": batch_id
     }
   ],
   "properties": [
@@ -222,23 +195,21 @@ isolated function testReadbatchofLineItems() returns error? {
   ]
 }
     );
-    io:println(response);
-    
-
+    test:assertTrue(response?.results[0].id == batch_id, "Batch not found");
 }
+
 
 // Update a batch of line items
 @test:Config {
     groups: ["unit_tests"],
-    enable:false
+    dependsOn: [testReadbatchofLineItems]
 }
-
-isolated function testUpdatebatchofLineItems() returns error? {
+function testUpdatebatchofLineItems() returns error? {
     BatchResponseSimplePublicObject response = check hubspot->/batch/update.post(
         payload = {
   "inputs": [
     {
-      "id": "27078953355",
+      "id": batch_id,
       "properties": {
         "price": "450.00",
         "quantity": "1",
@@ -248,18 +219,20 @@ isolated function testUpdatebatchofLineItems() returns error? {
   ]
 }
     );
-    io:println(response);
-    
-
+    test:assertTrue(response?.results[0].id == batch_id, "Batch not found");
+    test:assertEquals(response?.results[0].properties["name"] , "Updated Item 4", "Name mismatched");
+    test:assertEquals(response?.results[0].properties["price"] , "450.00", "Price mismatched");
+    test:assertEquals(response?.results[0].properties["quantity"] , "1", "Quantity mismatched");
 }
+
 
 // Upsert a batch of line items
 // Have to sanitize as this doesn't work #skipped
 @test:Config {
     groups: ["unit_tests"],
+    dependsOn: [testUpdatebatchofLineItems],
     enable:false
 }
-
 isolated function testUpsertbatchofLineItems() returns error? {
     BatchResponseSimplePublicUpsertObject|BatchResponseSimplePublicUpsertObjectWithErrors response = check hubspot->/batch/upsert.post(
         payload = {
@@ -275,17 +248,13 @@ isolated function testUpsertbatchofLineItems() returns error? {
   ]
 }
     );
-    io:println(response);
-    
-
+    test:assertTrue(response?.results != [], "Line items not found");
 }
-
 
 
 // Search for batch of line items
 @test:Config {
-    groups: ["unit_tests"],
-    enable:false
+    groups: ["unit_tests"]
 }
 
 isolated function testSearchBatchofLineItems() returns error? {
@@ -302,8 +271,26 @@ isolated function testSearchBatchofLineItems() returns error? {
   ]
 }
     );
-    io:println(response);
-    
+    test:assertTrue(response?.total != 0, "Line items not found");
+}
 
+
+// Archive a batch of line items
+@test:Config {
+    groups: ["unit_tests"],
+    dependsOn: [testUpdatebatchofLineItems]
+}
+function testArchivebatchofLineItem() returns error? {
+    http:Response response = check hubspot->/batch/archive.post(
+        payload ={
+            "inputs": [
+                {
+                    "id": batch_id
+                }
+            ]
+
+        }
+    );
+    test:assertTrue(response.statusCode == 204);   
 }
 

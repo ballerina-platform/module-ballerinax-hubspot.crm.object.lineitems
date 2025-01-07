@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.10.3"
+distribution-version = "2201.10.0"
 
 [[package]]
 org = "ballerina"
@@ -313,7 +313,7 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "hubspot.crm.object.lineitems"
+name = "hubspot.crm.obj.lineitems"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
@@ -323,6 +323,6 @@ dependencies = [
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "hubspot.crm.object.lineitems", moduleName = "hubspot.crm.object.lineitems"}
+	{org = "ballerinax", packageName = "hubspot.crm.obj.lineitems", moduleName = "hubspot.crm.obj.lineitems"}
 ]
 

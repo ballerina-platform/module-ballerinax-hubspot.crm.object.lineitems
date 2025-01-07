@@ -1,10 +1,12 @@
+
 # Overview
 
 [HubSpot](https://www.hubspot.com/our-story) is an AI-powered customer relationship management (CRM) platform. 
 
-The `ballerinax/hubspot.crm.object.lineitems`  offers APIs to connect and interact with the [HubSpot API](https://developers.hubspot.com/docs/reference/api/overview) endpoints, specifically based on the [API Docs](https://developers.hubspot.com/docs/guides/api/crm/objects/line-items).
+The `ballerinax/hubspot.crm.object.lineitems`  offers APIs to connect and interact with the [HubSpot API V3](https://developers.hubspot.com/docs/reference/api/overview) endpoints, specifically based on the [API Docs](https://developers.hubspot.com/docs/guides/api/crm/objects/line-items).
 
 # Setup guide
+
 
 You need a [HubSpot developer account](https://developers.hubspot.com/get-started) with an [app](https://developers.hubspot.com/docs/guides/apps/public-apps/overview) to use HubSpot connectors.
 To obtain an authentication token for your HubSpot developer account, you can use OAuth for public apps. 
@@ -13,19 +15,35 @@ Below is a step-by-step guide for both methods:
 
 ### Using OAuth for Public Apps:
 
-### `Step 01` Create Developer Account
-* If you don't have a developer account, register for a free Hubspot developer account.[click here](https://app.hubspot.com/signup-hubspot/developers?_ga=2.207749649.2047916093.1734412948-232493525.1734412948&step=landing_page)
+### Step 01 : Create Developer Account
+* If you have an account already go to the [Hubspot account portal](https://app.hubspot.com/myaccounts-beta)
+* If you don't have a developer account, register for a free Hubspot developer account.[(click here)](https://app.hubspot.com/signup-hubspot/developers?_ga=2.207749649.2047916093.1734412948-232493525.1734412948&step=landing_page)
 
-### `Step 02` Create a [Developer test account](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts):
+### Step 02 : Create a [Developer test account](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts):
+Within app developer accounts, you can create developer test accounts to test apps and integrations without affecting any real HubSpot data.
 
-### `Step 03` Create a HubSpot App:
+Note: These accounts are only for development and testing purposes. In production you should not use Developer Test Accounts.
+
+1. Go to Test Account section from the left sidebar.
+
+   ![Hubspot Developer Portal](../docs/setup/resources/test_acc_1.png)
+
+
+2. Click Create developer test account.
+
+   ![Hubspot Developer Test Account](../docs/setup/resources/test_acc_2.png)
+
+3. Create developer test account by providing a name
+
+### Step 03 : Create a HubSpot App:
 
   * In your developer account, navigate to the [Apps](https://app.hubspot.com/developer/48567544/applications) section.
-Click on `Create App` and provide the necessary details, including the app name and description.
+Click on `Create App` and provide the necessary details, including the app name and description to create a Hubspot developer App.
+![create app](../docs/setup/resources/create_app_1.png)
 
-### `Step 04` Initiate the OAuth Flow:
+### Step 04 : Initiate the OAuth Flow:
 
-* Move to the auth tab in the created app and set the permissions there ![alt text](images/image.png)
+* Move to the auth tab in the created app and set the permissions there ![alt text](../docs/setup/resources/image.png)
 
 *  This direct users to HubSpot's authorisation URL with the following query parameters:
 
@@ -36,17 +54,18 @@ Click on `Create App` and provide the necessary details, including the app name 
 `scope`: A space-separated list of scopes your app is requesting.
 
 
-### `Step 05` Scope selection: 
+### Step 05: Scope selection: 
 
-* Go to the [crm.objects.line-items API reference](https://developers.hubspot.com/docs/reference/api/crm/objects/line-items) and there you will see the scope has defined below way![alt text](images/image-1.png)
+* Go to the [crm.objects.line-items API reference](https://developers.hubspot.com/docs/reference/api/crm/objects/line-items) and there you will see the scope has defined below way![Scope selection](../docs/setup/resources/image-1.png)
 
-* Now come back to your Auth page and add the relevant scopes using the `Add new scope` button ![alt text](images/image-2.png)
+* Now come back to your Auth page and add the relevant scopes using the `Add new scope` button ![alt text](../docs/setup/resources/image-2.png)
 
-### `Step 06` Add redirect URL to `localhost:9090`
+### Step 06: Add redirect URL
+Add your Redirect URL in the relevant section. You can also use `localhost` addresses for localhost development purposes. ![redirect url](../docs/setup/resources/image-3.png)
 
-### `Step 07` Activate Ballerina service
-
-* Use the following ballerina code and run it locally on your computer using `bal run` to activate the service. [Code](https://gist.github.com/lnash94/0af47bfcb7cc1e3d59e06364b3c86b59)
+### Step 07 (For localhost redirect url): Activate ballerina service
+* If you are using a 'localhost' redirect url, make sure to have a listener running at the relevant port before executing the next step.
+* Use the following ballerina code and run it locally on your computer using `bal run` to activate the service. 
 
 ``` bash
 import ballerina/http;
@@ -70,32 +89,39 @@ service / on new http:Listener(9090) {
        }
    }
 }
-
-
 ```
 
-### `Step 08` Copy the sample installation URL and paste it on a web browser. ![alt text](images/image-3.png)
+### Step 08: Copy the sample installation URL and paste it on a web browser. ![image-3](../docs/setup/resources/image-3.png)
 
 * Browser pop the HubSpost account and ask where to install the App then select your developer test account 
 * You will receive a code from there and it will be displayed on the browser
 
-### `Step 09` Place ur code, client_id and client_screct  in to the correct place here,
+
+### Step 09: Get the Refresh & Access tokens
+Run the following curl command. Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI`> and `<YOUR_CLIENT_SECRET>` with your specific value. Use the code you received in the above step 8 as the `<CODE>`.
+
 ``` bash
 curl --request POST \
   --url https://api.hubapi.com/oauth/v1/token \
   --header 'content-type: application/x-www-form-urlencoded' \
   --data 'grant_type=authorization_code&code=<code>&redirect_uri=http://localhost:9090&client_id=<client_id>&client_secret=<client_secret>'
 ```
-* Then execute this in terminal. If successful, you'll receive a JSON response containing `access_token` and `refresh_token`.Use the tokens to authorize client.
+* Then execute this in terminal. This command will return the access token necessary for API calls.
 
+   ```json
+   {
+     "token_type": "bearer",
+     "refresh_token": "<Refresh Token>",
+     "access_token": "<Access Token>",
+     "expires_in": 1800
+   }
+   ```
 
-
-
+Store the access token securely for use in your application.
 
 
 # Quickstart
 
-[//]: # (TODO: Add a quickstart guide to demonstrate a basic functionality of the module, including sample code snippets.)
 To use the `HubSpot CRM Object Line items` connector in your Ballerina application, update the `.bal` file as follows:
 
 ### Step 1: Import the module
@@ -139,9 +165,9 @@ import ballerina/oauth2;
 
 Now, utilize the available connector operations. A sample usecase is shown below.
 
-#### Create a New Ticket
+#### Create a New Line item
 
-```ballerina
+```bash
 public function main() returns error? {
     SimplePublicObjectInputForCreate payload = {
 

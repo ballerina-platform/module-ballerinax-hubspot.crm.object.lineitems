@@ -20,98 +20,98 @@
 import ballerina/http;
 
 public type StandardError record {
-    record {}? subCategory?;
-    record {|string[]?...;|}? context;
-    record {|string?...;|}? links;
-    string? id?;
-    string? category;
-    string? message;
-    ErrorDetail[]? errors;
-    string? status;
+    record {} subCategory?;
+    record {|string[]...;|} context;
+    record {|string...;|} links;
+    string id?;
+    string category;
+    string message;
+    ErrorDetail[] errors;
+    string status;
 };
 
 public type CollectionResponseAssociatedId record {
-    Paging? paging?;
-    AssociatedId[]? results;
+    Paging paging?;
+    AssociatedId[] results;
 };
 
 public type PublicAssociationsForObject record {
-    AssociationSpec[]? types;
-    PublicObjectId? to;
+    AssociationSpec[] types;
+    PublicObjectId to;
 };
 
 public type BatchResponseSimplePublicObject record {
-    string? completedAt;
-    string? requestedAt?;
-    string? startedAt;
-    record {|string?...;|}? links?;
-    SimplePublicObject[]? results;
+    string completedAt;
+    string requestedAt?;
+    string startedAt;
+    record {|string...;|} links?;
+    SimplePublicObject[] results;
     "PENDING"|"PROCESSING"|"CANCELED"|"COMPLETE" status;
 };
 
 public type FilterGroup record {
-    Filter[]? filters;
+    Filter[] filters;
 };
 
 public type ErrorDetail record {
     # A specific category that contains more specific detail about the error
-    string? subCategory?;
+    string subCategory?;
     # The status code associated with the error detail
-    string? code?;
+    string code?;
     # The name of the field or parameter in which the error was found.
-    string? 'in?;
+    string 'in?;
     # Context about the error condition
-    record {|string[]?...;|}? context?;
+    record {|string[]...;|} context?;
     # A human readable message describing the error along with remediation steps where appropriate
-    string? message;
+    string message;
 };
 
 public type ForwardPaging record {
-    NextPage? next?;
+    NextPage next?;
 };
 
 public type SimplePublicObjectId record {
-    string? id;
+    string id;
 };
 
 public type BatchResponseSimplePublicUpsertObjectWithErrors record {
-    string? completedAt;
-    int:Signed32? numErrors?;
-    string? requestedAt?;
-    string? startedAt;
-    record {|string?...;|}? links?;
-    SimplePublicUpsertObject[]? results;
-    StandardError[]? errors?;
+    string completedAt;
+    int:Signed32 numErrors?;
+    string requestedAt?;
+    string startedAt;
+    record {|string...;|} links?;
+    SimplePublicUpsertObject[] results;
+    StandardError[] errors?;
     "PENDING"|"PROCESSING"|"CANCELED"|"COMPLETE" status;
 };
 
 public type BatchReadInputSimplePublicObjectId record {
-    string[]? propertiesWithHistory;
-    string? idProperty?;
-    SimplePublicObjectId[]? inputs;
-    string[]? properties;
+    string[] propertiesWithHistory;
+    string idProperty?;
+    SimplePublicObjectId[] inputs;
+    string[] properties;
 };
 
 public type BatchResponseSimplePublicUpsertObject record {
-    string? completedAt;
-    string? requestedAt?;
-    string? startedAt;
-    record {|string?...;|}? links?;
-    SimplePublicUpsertObject[]? results;
+    string completedAt;
+    string requestedAt?;
+    string startedAt;
+    record {|string...;|} links?;
+    SimplePublicUpsertObject[] results;
     "PENDING"|"PROCESSING"|"CANCELED"|"COMPLETE" status;
 };
 
 public type ValueWithTimestamp record {
-    string? sourceId?;
-    string? sourceType;
-    string? sourceLabel?;
-    int:Signed32? updatedByUserId?;
-    string? value;
-    string? timestamp;
+    string sourceId?;
+    string sourceType;
+    string sourceLabel?;
+    int:Signed32 updatedByUserId?;
+    string value;
+    string timestamp;
 };
 
 public type BatchInputSimplePublicObjectId record {
-    SimplePublicObjectId[]? inputs;
+    SimplePublicObjectId[] inputs;
 };
 
 # Represents the Queries record for the operation: get-/crm/v3/objects/line_items_getPage
@@ -138,23 +138,23 @@ public type OAuth2RefreshTokenGrantConfig record {|
 |};
 
 public type BatchInputSimplePublicObjectBatchInputUpsert record {
-    SimplePublicObjectBatchInputUpsert[]? inputs;
+    SimplePublicObjectBatchInputUpsert[] inputs;
 };
 
 public type CollectionResponseWithTotalSimplePublicObjectForwardPaging record {
-    int:Signed32? total;
-    ForwardPaging? paging?;
-    SimplePublicObject[]? results;
+    int:Signed32 total;
+    ForwardPaging paging?;
+    SimplePublicObject[] results;
 };
 
 public type SimplePublicObject record {
-    string? createdAt;
-    boolean? archived?;
-    string? archivedAt?;
-    record {|ValueWithTimestamp[]?...;|}? propertiesWithHistory?;
-    string? id;
-    record {|string?...;|}? properties;
-    string? updatedAt;
+    string createdAt;
+    boolean archived?;
+    string archivedAt?;
+    record {|ValueWithTimestamp[]...;|} propertiesWithHistory?;
+    string id;
+    record {|string?...;|} properties;
+    string updatedAt;
 };
 
 # Provides a set of configurations for controlling the behaviours when communicating with a remote HTTP endpoint.
@@ -193,7 +193,7 @@ public type ConnectionConfig record {|
 |};
 
 public type PublicObjectId record {
-    string? id;
+    string id;
 };
 
 # Represents the Queries record for the operation: post-/crm/v3/objects/line_items/batch/read_read
@@ -203,34 +203,34 @@ public type PostCrmV3ObjectsLine_itemsBatchRead_readQueries record {
 };
 
 public type Paging record {
-    NextPage? next?;
-    PreviousPage? prev?;
+    NextPage next?;
+    PreviousPage prev?;
 };
 
 public type PublicObjectSearchRequest record {
-    string? query?;
-    int:Signed32? 'limit?;
-    string? after?;
-    string[]? sorts?;
-    string[]? properties?;
-    FilterGroup[]? filterGroups?;
+    string query?;
+    int:Signed32 'limit?;
+    string after?;
+    string[] sorts?;
+    string[] properties?;
+    FilterGroup[] filterGroups?;
 };
 
 public type SimplePublicObjectBatchInputUpsert record {
-    string? idProperty?;
-    string? objectWriteTraceId?;
-    string? id;
-    record {|string?...;|}? properties;
+    string idProperty?;
+    string objectWriteTraceId?;
+    string id;
+    record {|string...;|} properties;
 };
 
 public type BatchResponseSimplePublicObjectWithErrors record {
-    string? completedAt;
-    int:Signed32? numErrors?;
-    string? requestedAt?;
-    string? startedAt;
-    record {|string?...;|}? links?;
-    SimplePublicObject[]? results;
-    StandardError[]? errors?;
+    string completedAt;
+    int:Signed32 numErrors?;
+    string requestedAt?;
+    string startedAt;
+    record {|string...;|} links?;
+    SimplePublicObject[] results;
+    StandardError[] errors?;
     "PENDING"|"PROCESSING"|"CANCELED"|"COMPLETE" status;
 };
 
@@ -248,36 +248,36 @@ public type ProxyConfig record {|
 |};
 
 public type SimplePublicObjectInput record {
-    string? objectWriteTraceId?;
-    record {|string?...;|}? properties;
+    string objectWriteTraceId?;
+    record {|string...;|} properties;
 };
 
 public type CollectionResponseSimplePublicObjectWithAssociationsForwardPaging record {
-    ForwardPaging? paging?;
-    SimplePublicObjectWithAssociations[]? results;
+    ForwardPaging paging?;
+    SimplePublicObjectWithAssociations[] results;
 };
 
 public type AssociationSpec record {
     "HUBSPOT_DEFINED"|"USER_DEFINED"|"INTEGRATOR_DEFINED" associationCategory;
-    int:Signed32? associationTypeId;
+    int:Signed32 associationTypeId;
 };
 
 public type SimplePublicObjectWithAssociations record {
-    record {|CollectionResponseAssociatedId?...;|}? associations?;
-    string? createdAt;
-    boolean? archived?;
-    string? archivedAt?;
-    record {|ValueWithTimestamp[]?...;|}? propertiesWithHistory?;
-    string? id;
-    record {|string?...;|}? properties;
-    string? updatedAt;
+    record {|CollectionResponseAssociatedId...;|} associations?;
+    string createdAt;
+    boolean archived?;
+    string archivedAt?;
+    record {|ValueWithTimestamp[]...;|} propertiesWithHistory?;
+    string id;
+    record {|string?...;|} properties;
+    string updatedAt;
 };
 
 public type Filter record {
-    string? highValue?;
-    string? propertyName;
-    string[]? values?;
-    string? value?;
+    string highValue?;
+    string propertyName;
+    string[] values?;
+    string value?;
     # null
     "EQ"|"NEQ"|"LT"|"LTE"|"GT"|"GTE"|"BETWEEN"|"IN"|"NOT_IN"|"HAS_PROPERTY"|"NOT_HAS_PROPERTY"|"CONTAINS_TOKEN"|"NOT_CONTAINS_TOKEN" operator;
 };
@@ -293,16 +293,16 @@ public type ClientHttp1Settings record {|
 |};
 
 public type PreviousPage record {
-    string? before;
-    string? link?;
+    string before;
+    string link?;
 };
 
 public type BatchInputSimplePublicObjectBatchInput record {
-    SimplePublicObjectBatchInput[]? inputs;
+    SimplePublicObjectBatchInput[] inputs;
 };
 
 public type BatchInputSimplePublicObjectInputForCreate record {
-    SimplePublicObjectInputForCreate[]? inputs;
+    SimplePublicObjectInputForCreate[] inputs;
 };
 
 # Represents the Queries record for the operation: get-/crm/v3/objects/line_items/{lineItemId}_getById
@@ -326,31 +326,31 @@ public type PatchCrmV3ObjectsLine_itemsLineitemid_updateQueries record {
 };
 
 public type SimplePublicUpsertObject record {
-    string? createdAt;
-    boolean? archived?;
-    string? archivedAt?;
-    boolean? 'new;
-    record {|ValueWithTimestamp[]?...;|}? propertiesWithHistory?;
-    string? id;
-    record {|string?...;|}? properties;
-    string? updatedAt;
+    string createdAt;
+    boolean archived?;
+    string archivedAt?;
+    boolean 'new;
+    record {|ValueWithTimestamp[]...;|} propertiesWithHistory?;
+    string id;
+    record {|string...;|} properties;
+    string updatedAt;
 };
 
 public type SimplePublicObjectBatchInput record {
-    string? idProperty?;
-    string? objectWriteTraceId?;
-    string? id;
-    record {|string?...;|}? properties;
+    string idProperty?;
+    string objectWriteTraceId?;
+    string id;
+    record {|string...;|} properties;
 };
 
 public type NextPage record {
-    string? link?;
-    string? after;
+    string link?;
+    string after;
 };
 
 public type AssociatedId record {
-    string? id;
-    string? 'type;
+    string id;
+    string 'type;
 };
 
 # Provides API key configurations needed when communicating with a remote HTTP endpoint.
@@ -360,7 +360,7 @@ public type ApiKeysConfig record {|
 |};
 
 public type SimplePublicObjectInputForCreate record {
-    PublicAssociationsForObject[]? associations;
-    string? objectWriteTraceId?;
-    record {|string?...;|}? properties;
+    PublicAssociationsForObject[] associations;
+    string objectWriteTraceId?;
+    record {|string...;|} properties;
 };

@@ -23,7 +23,8 @@ import ballerina/http;
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
-configurable string serviceUrl = "https://api.hubapi.com/crm/v3/objects/line_items";
+configurable boolean isLiveServer = ?;
+configurable string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/line_items": "http://localhost:9090";
 
 //test variables
 string lineitem_id = "";
@@ -42,7 +43,7 @@ final Client hubspot = check new Client(config, serviceUrl);
 
 // get all line of items
 @test:Config {
-    groups: ["unit_tests"]
+    groups: ["live_tests", "mock_tests"]
 }
 isolated function testGetLineofItems() returns error? {
     CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hubspot->/.get(
@@ -53,7 +54,7 @@ isolated function testGetLineofItems() returns error? {
 
 // create line of items
 @test:Config {
-    groups: ["unit_tests"]
+    groups: ["live_tests","mock_tests"]
 }
 function testPostLineofItems() returns error? {
     SimplePublicObject response = check hubspot->/.post(
@@ -90,7 +91,7 @@ function testPostLineofItems() returns error? {
 
 // get line item by id
 @test:Config {
-    groups: ["unit_tests"],
+    groups: ["live_tests"],
     dependsOn: [testPostLineofItems]
 }
 function testGetlineItem() returns error? {
@@ -101,7 +102,7 @@ function testGetlineItem() returns error? {
 
 // update line item by id
 @test:Config {
-    groups: ["unit_tests"],
+    groups: ["live_tests"],
     dependsOn: [testGetlineItem]
 }
 function testUpdateProperties() returns error? {
@@ -123,7 +124,7 @@ function testUpdateProperties() returns error? {
 
 // Archive a line item
 @test:Config {
-    groups: ["unit_tests"],
+    groups: ["live_tests"],
     dependsOn: [testUpdateProperties]
 }
 function testDeleteLineItem() returns error? {
@@ -134,7 +135,7 @@ function testDeleteLineItem() returns error? {
 
 // Create a batch of line items
 @test:Config {
-    groups: ["unit_tests"]
+    groups: ["live_tests"]
 }
 function testCreatebatchofLineItems() returns error? {
     BatchResponseSimplePublicObject response = check hubspot->/batch/create.post(
@@ -176,7 +177,7 @@ function testCreatebatchofLineItems() returns error? {
 
 // Read a batch of line items
 @test:Config {
-    groups: ["unit_tests"],
+    groups: ["live_tests"],
     dependsOn: [testCreatebatchofLineItems]
 }
 function testReadbatchofLineItems() returns error? {
@@ -201,7 +202,7 @@ function testReadbatchofLineItems() returns error? {
 
 // Update a batch of line items
 @test:Config {
-    groups: ["unit_tests"],
+    groups: ["live_tests"],
     dependsOn: [testReadbatchofLineItems]
 }
 function testUpdatebatchofLineItems() returns error? {
@@ -227,34 +228,32 @@ function testUpdatebatchofLineItems() returns error? {
 
 
 // Upsert a batch of line items
-// Have to sanitize as this doesn't work #skipped
 @test:Config {
-    groups: ["unit_tests"],
-    dependsOn: [testUpdatebatchofLineItems],
-    enable:false
+    groups: ["mock_tests"]
 }
 isolated function testUpsertbatchofLineItems() returns error? {
-    BatchResponseSimplePublicUpsertObject|BatchResponseSimplePublicUpsertObjectWithErrors response = check hubspot->/batch/upsert.post(
-        payload = {
-  inputs: [
-    {
-      "idProperty": "string",
-      "objectWriteTraceId": "string",
-      "id": "string",
-      "properties": {
-        "currency":"rupees"
-        }
-    }
-  ]
-}
-    );
+    BatchInputSimplePublicObjectBatchInputUpsert payload = {
+        "inputs": [
+            {
+                "idProperty": "hs_object_id",
+                "objectWriteTraceId": "1",
+                "id": "27078953355",
+                "properties": {
+                    "additionalprop1": "string",
+                    "additionalprop2": "string",
+                    "additionalprop3": "string"
+                }
+            }
+        ]
+    };
+    BatchResponseSimplePublicUpsertObject response = check hubspot->/batch/upsert.post(payload);
     test:assertTrue(response?.results != [], "Line items not found");
 }
 
 
 // Search for batch of line items
 @test:Config {
-    groups: ["unit_tests"]
+    groups: ["live_tests"]
 }
 
 isolated function testSearchBatchofLineItems() returns error? {
@@ -277,7 +276,7 @@ isolated function testSearchBatchofLineItems() returns error? {
 
 // Archive a batch of line items
 @test:Config {
-    groups: ["unit_tests"],
+    groups: ["live_tests"],
     dependsOn: [testUpdatebatchofLineItems]
 }
 function testArchivebatchofLineItem() returns error? {

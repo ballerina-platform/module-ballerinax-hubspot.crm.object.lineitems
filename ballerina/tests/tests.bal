@@ -1,4 +1,4 @@
-// Copyright (c) 2024, WSO2 LLC. (http://www.wso2.com).
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
 //
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -13,7 +13,6 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-
 
 
 import ballerina/test;
@@ -37,11 +36,10 @@ OAuth2RefreshTokenGrantConfig auth = {
        credentialBearer: oauth2:POST_BODY_BEARER // this line should be added in to when you are going to create auth object.
    };
 
-ConnectionConfig config = {auth};
-final Client hubspot = check new Client(config, serviceUrl);
+final Client hubspot = check new ({ auth });
 
 
-// get all line of items
+
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
@@ -52,7 +50,7 @@ isolated function testGetLineofItems() returns error? {
     }
 
 
-// create line of items
+
 @test:Config {
     groups: ["live_tests","mock_tests"]
 }
@@ -89,7 +87,7 @@ function testPostLineofItems() returns error? {
 }
 
 
-// get line item by id
+
 @test:Config {
     groups: ["live_tests"],
     dependsOn: [testPostLineofItems]
@@ -100,7 +98,7 @@ function testGetlineItem() returns error? {
 }
 
 
-// update line item by id
+
 @test:Config {
     groups: ["live_tests"],
     dependsOn: [testGetlineItem]
@@ -122,7 +120,7 @@ function testUpdateProperties() returns error? {
 }
 
 
-// Archive a line item
+
 @test:Config {
     groups: ["live_tests"],
     dependsOn: [testUpdateProperties]
@@ -133,7 +131,7 @@ function testDeleteLineItem() returns error? {
 }
 
 
-// Create a batch of line items
+
 @test:Config {
     groups: ["live_tests"]
 }
@@ -175,7 +173,7 @@ function testCreatebatchofLineItems() returns error? {
 }
 
 
-// Read a batch of line items
+
 @test:Config {
     groups: ["live_tests"],
     dependsOn: [testCreatebatchofLineItems]
@@ -200,7 +198,7 @@ function testReadbatchofLineItems() returns error? {
 }
 
 
-// Update a batch of line items
+
 @test:Config {
     groups: ["live_tests"],
     dependsOn: [testReadbatchofLineItems]
@@ -227,7 +225,7 @@ function testUpdatebatchofLineItems() returns error? {
 }
 
 
-// Upsert a batch of line items
+
 @test:Config {
     groups: ["mock_tests"]
 }
@@ -251,7 +249,7 @@ isolated function testUpsertbatchofLineItems() returns error? {
 }
 
 
-// Search for batch of line items
+
 @test:Config {
     groups: ["live_tests"]
 }
@@ -274,7 +272,7 @@ isolated function testSearchBatchofLineItems() returns error? {
 }
 
 
-// Archive a batch of line items
+
 @test:Config {
     groups: ["live_tests"],
     dependsOn: [testUpdatebatchofLineItems]

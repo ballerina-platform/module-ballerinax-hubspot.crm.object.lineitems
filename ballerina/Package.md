@@ -14,11 +14,11 @@ Below is a step-by-step guide for both methods:
 
 ### Using OAuth for Public Apps:
 
-### Step 01 : Create Developer Account
+#### Step 01 : Create Developer Account
 * If you have an account already go to the [Hubspot account portal](https://app.hubspot.com/myaccounts-beta)
 * If you don't have a developer account, register for a free Hubspot developer account.[(click here)](https://app.hubspot.com/signup-hubspot/developers?_ga=2.207749649.2047916093.1734412948-232493525.1734412948&step=landing_page)
 
-### Step 02 : Create a [Developer test account](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts):
+#### Step 02 : Create a [Developer test account](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts):
 Within app developer accounts, you can create developer test accounts to test apps and integrations without affecting any real HubSpot data.
 
 Note: These accounts are only for development and testing purposes. In production you should not use Developer Test Accounts.
@@ -34,13 +34,13 @@ Note: These accounts are only for development and testing purposes. In productio
 
 3. Create developer test account by providing a name
 
-### Step 03 : Create a HubSpot App:
+#### Step 03 : Create a HubSpot App:
 
   * In your developer account, navigate to the [Apps](https://app.hubspot.com/developer/48567544/applications) section.
 Click on `Create App` and provide the necessary details, including the app name and description to create a Hubspot developer App.
 ![create app](../docs/setup/resources/create_app_1.png)
 
-### Step 04 : Initiate the OAuth Flow:
+#### Step 04 : Initiate the OAuth Flow:
 
 * Move to the auth tab in the created app and set the permissions there ![alt text](../docs/setup/resources/image.png)
 
@@ -53,16 +53,16 @@ Click on `Create App` and provide the necessary details, including the app name 
 `scope`: A space-separated list of scopes your app is requesting.
 
 
-### Step 05: Scope selection: 
+#### Step 05: Scope selection: 
 
 * Go to the [crm.objects.line-items API reference](https://developers.hubspot.com/docs/reference/api/crm/objects/line-items) and there you will see the scope has defined below way![Scope selection](../docs/setup/resources/image-1.png)
 
 * Now come back to your Auth page and add the relevant scopes using the `Add new scope` button ![alt text](../docs/setup/resources/image-2.png)
 
-### Step 06: Add redirect URL
+#### Step 06: Add redirect URL
 Add your Redirect URL in the relevant section. You can also use `localhost` addresses for localhost development purposes. ![redirect url](../docs/setup/resources/image-3.png)
 
-### Step 07 (For localhost redirect url): Activate ballerina service
+#### Step 07 (For localhost redirect url): Activate ballerina service
 * If you are using a 'localhost' redirect url, make sure to have a listener running at the relevant port before executing the next step.
 * Use the following ballerina code and run it locally on your computer using `bal run` to activate the service. 
 
@@ -90,13 +90,13 @@ service / on new http:Listener(9090) {
 }
 ```
 
-### Step 08: Copy the sample installation URL and paste it on a web browser. ![image-3](../docs/setup/resources/image-3.png)
+#### Step 08: Copy the sample installation URL and paste it on a web browser. ![image-3](../docs/setup/resources/image-3.png)
 
 * Browser pop the HubSpost account and ask where to install the App then select your developer test account 
 * You will receive a code from there and it will be displayed on the browser
 
 
-### Step 09: Get the Refresh & Access tokens
+#### Step 09: Get the Refresh & Access tokens
 Run the following curl command. Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI`> and `<YOUR_CLIENT_SECRET>` with your specific value. Use the code you received in the above step 8 as the `<CODE>`.
 
 ``` bash
@@ -123,7 +123,7 @@ Store the access token securely for use in your application.
 
 To use the `HubSpot CRM Object Line items` connector in your Ballerina application, update the `.bal` file as follows:
 
-### Step 1: Import the module
+#### Step 1: Import the module
 
 Import the `hubspot.crm.object.lineitems` module and `oauth2` module.
 
@@ -132,7 +132,7 @@ import ballerinax/hubspot.crm.object.lineitems as hslineitems;
 import ballerina/oauth2;
 ```
 
-### Step 2: Instantiate a new connector
+#### Step 2: Instantiate a new connector
 
 1. Create a `Config.toml` file and, configure the obtained credentials obtained in the above steps as follows:
 
@@ -160,7 +160,7 @@ import ballerina/oauth2;
    final Client HubSpotClient = check new Client(config, "https://api.hubapi.com");
    ```
 
-### Step 3: Invoke the connector operation
+#### Step 3: Invoke the connector operation
 
 Now, utilize the available connector operations. A sample usecase is shown below.
 

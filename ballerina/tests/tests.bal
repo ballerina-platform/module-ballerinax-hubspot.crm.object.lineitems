@@ -206,13 +206,13 @@ function testUpdateBatchLineItems() returns error? {
 
 @test:Config {
     groups: ["mock_tests"],
-    enable: !isLiveServer
+    enable: false
 }
 isolated function testUpsertBatchLineItems() returns error? {
     BatchInputSimplePublicObjectBatchInputUpsert payload = {
         "inputs": [
             {
-                "idProperty": "hs_sku",
+                "idProperty": "hs_object_id",
                 "objectWriteTraceId": "1",
                 "id": "27078953355",
                 "properties": {

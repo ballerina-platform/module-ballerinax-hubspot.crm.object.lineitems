@@ -8,17 +8,15 @@
 
 # Overview
 
-[HubSpot](https://www.hubspot.com/our-story) is an AI-powered customer relationship management (CRM) platform. 
+[HubSpot](https://www.hubspot.com/our-story) is an AI-powered customer platform. 
 
-The `ballerinax/hubspot.crm.object.lineitems`  offers APIs to connect and interact with the [HubSpot CRM-Object Lineitems API](https://developers.hubspot.com/docs/guides/api/crm/objects/line-items) endpoints, specifically based on the [HubSpot REST API](https://developers.hubspot.com/docs/reference/api/overview).
+The `ballerinax/hubspot.crm.object.lineitems` package offers APIs to connect and interact with the [HubSpot CRM Lineitems API](https://developers.hubspot.com/docs/reference/api/crm/objects/line-items) endpoints, specially based on [HubSpot REST API v3](https://developers.hubspot.com/docs/reference/api).
 
 # Setup guide
 
 
 You need a [HubSpot developer account](https://developers.hubspot.com/get-started) with an [app](https://developers.hubspot.com/docs/guides/apps/public-apps/overview) to use HubSpot connectors.
 To obtain an authentication token for your HubSpot developer account, you can use OAuth for public apps. 
-
-Below is a step-by-step guide for both methods:
 
 ### Using OAuth for Public Apps:
 

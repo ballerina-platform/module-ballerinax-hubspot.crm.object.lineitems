@@ -33,9 +33,7 @@ hslineitems:OAuth2RefreshTokenGrantConfig auth = {
     credentialBearer: oauth2:POST_BODY_BEARER
 };
 
-hslineitems:ConnectionConfig config = {auth: auth};
-
-final hslineitems:Client hubspot = check new hslineitems:Client(config);
+final hslineitems:Client hsLineItems = check new ({ auth });
 
 public function main() returns error? {
     //Step 1: Create a Batch of Products for an Order
@@ -148,7 +146,7 @@ public function main() returns error? {
             }
         ]
     };
-    hslineitems:BatchResponseSimplePublicObject response = check hubspot->/batch/create.post(payload = batch_payload);
+    hslineitems:BatchResponseSimplePublicObject response = check hsLineItems->/batch/create.post(payload = batch_payload);
     io:println("Batch of new line items added successfully");
 
     foreach var result in response.results {
@@ -157,7 +155,7 @@ public function main() returns error? {
 
     //Step 2:After creating the batch, the warehouse manager verifies its contents to ensure accuracy.
     foreach string batch_id in batchitemIds {
-        hslineitems:BatchResponseSimplePublicObject batchitems_response = check hubspot->/batch/read.post(
+        hslineitems:BatchResponseSimplePublicObject batchitems_response = check hsLineItems->/batch/read.post(
             payload = {
                 "propertiesWithHistory": [
                     "name"
@@ -176,7 +174,7 @@ public function main() returns error? {
     }
 
     //Step 3: The warehouse manager searches for items in the order to update the stock levels.
-    hslineitems:CollectionResponseWithTotalSimplePublicObjectForwardPaging searchitems_response = check hubspot->/search.post(
+    hslineitems:CollectionResponseWithTotalSimplePublicObjectForwardPaging searchitems_response = check hsLineItems->/search.post(
         payload = {
             "query": "Chair",
             "limit": 5,
@@ -204,13 +202,13 @@ public function main() returns error? {
                 }
             ]
         };
-        hslineitems:BatchResponseSimplePublicObject update_response = check hubspot->/batch/update.post(payload = update_payload);
+        hslineitems:BatchResponseSimplePublicObject update_response = check hsLineItems->/batch/update.post(payload = update_payload);
         io:println("Item with ID: ", update_response.results[0].id, " updated successfully");
     }
 
     //Step 5: Delete the batch of items from the inventory after the order is fulfilled.
     foreach string batch_id in batchitemIds {
-        http:Response delete_response = check hubspot->/batch/archive.post(
+        http:Response delete_response = check hsLineItems->/batch/archive.post(
             payload = {
                 "inputs": [
                     {

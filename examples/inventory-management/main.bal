@@ -31,9 +31,7 @@ hslineitems:OAuth2RefreshTokenGrantConfig auth = {
     credentialBearer: oauth2:POST_BODY_BEARER
 };
 
-hslineitems:ConnectionConfig config = {auth: auth};
-
-final hslineitems:Client hubspot = check new hslineitems:Client(config);
+final hslineitems:Client hsLineItems = check new ({ auth });
 
 public function main() returns error? {
     // Step 1:  Add New Lineitems to an Inventory deal
@@ -60,16 +58,16 @@ public function main() returns error? {
         }
     };
 
-    hslineitems:SimplePublicObject lineitem_response = check hubspot->/.post(payload = lineItem);
+    hslineitems:SimplePublicObject lineitem_response = check hsLineItems->/.post(payload = lineItem);
     lineitem_id = lineitem_response.id;
     io:println("Line item created successfully. Line item id: " + lineitem_id);
 
     // Step 2: Retrieve the existing products in the inventory deal
-    hslineitems:CollectionResponseSimplePublicObjectWithAssociationsForwardPaging items_response = check hubspot->/.get();
+    hslineitems:CollectionResponseSimplePublicObjectWithAssociationsForwardPaging items_response = check hsLineItems->/.get();
     io:println("Line items retrieved successfully. Line items: ", items_response.results);
 
     // Step 3: Update Product Information Based on Operational Needs
-    hslineitems:SimplePublicObject update_response = check hubspot->/[lineitem_id].patch(
+    hslineitems:SimplePublicObject update_response = check hsLineItems->/[lineitem_id].patch(
         payload = {
             "objectWriteTraceId": "2",
             "properties": {
@@ -82,7 +80,7 @@ public function main() returns error? {
     io:println("Line item updated successfully. Line item id: " + update_response.id);
 
     // Step 4: Check if a particular product exists by checking with its id
-    hslineitems:SimplePublicObjectWithAssociations readitem_response = check hubspot->/[lineitem_id].get();
+    hslineitems:SimplePublicObjectWithAssociations readitem_response = check hsLineItems->/[lineitem_id].get();
     io:println("Product already exists. Details: ", readitem_response);
 
     // Step 5: Add a batch of new products
@@ -153,6 +151,6 @@ public function main() returns error? {
             }
         ]
     };
-    hslineitems:BatchResponseSimplePublicObject response = check hubspot->/batch/create.post(payload = batch_payload);
+    hslineitems:BatchResponseSimplePublicObject response = check hsLineItems->/batch/create.post(payload = batch_payload);
     io:println("Batch of new line items added successfully");
 }

@@ -33,12 +33,12 @@ Note: These accounts are only for development and testing purposes. In productio
 
 1. Go to Test Account section from the left sidebar.
 
-   ![Hubspot Developer Portal](docs/setup/resources/test_acc_1.png)
+   ![Hubspot Developer Portal](docs/resources/setup/test_acc_1.png)
 
 
 2. Click Create developer test account.
 
-   ![Hubspot Developer Test Account](docs/setup/resources/test_acc_2.png)
+   ![Hubspot Developer Test Account](docs/resources/setup/test_acc_2.png)
 
 3. Create developer test account by providing a name
 
@@ -46,11 +46,11 @@ Note: These accounts are only for development and testing purposes. In productio
 
   * In your developer account, navigate to the [Apps](https://app.hubspot.com/developer/48567544/applications) section.
 Click on `Create App` and provide the necessary details, including the app name and description to create a Hubspot developer App.
-![create app](docs/setup/resources/create_app_1.png)
+![create app](docs/resources/setup/create_app_1.png)
 
 #### Step 04 : Initiate the OAuth Flow:
 
-* Move to the auth tab in the created app and set the permissions there ![alt text](docs/setup/resources/image.png)
+* Move to the auth tab in the created app and set the permissions there ![alt text](docs/resources/setup/image.png)
 
 *  This direct users to HubSpot's authorisation URL with the following query parameters:
 
@@ -63,12 +63,12 @@ Click on `Create App` and provide the necessary details, including the app name 
 
 #### Step 05: Scope selection: 
 
-* Go to the [crm.objects.line-items API reference](https://developers.hubspot.com/docs/reference/api/crm/objects/line-items) and there you will see the scope has defined below way![Scope selection](docs/setup/resources/image-1.png)
+* Go to the [crm.objects.line-items API reference](https://developers.hubspot.com/docs/reference/api/crm/objects/line-items) and there you will see the scope has defined below way![Scope selection](docs/resources/setup/image-1.png)
 
-* Now come back to your Auth page and add the relevant scopes using the `Add new scope` button ![alt text](docs/setup/resources/image-2.png)
+* Now come back to your Auth page and add the relevant scopes using the `Add new scope` button ![alt text](docs/resources/setup/image-2.png)
 
 #### Step 06: Add redirect URL
-Add your Redirect URL in the relevant section. You can also use `localhost` addresses for localhost development purposes. ![redirect url](docs/setup/resources/image-3.png)
+Add your Redirect URL in the relevant section. You can also use `localhost` addresses for localhost development purposes. ![redirect url](docs/resources/setup/image-3.png)
 
 #### Step 07 (For localhost redirect url): Activate ballerina service
 * If you are using a 'localhost' redirect url, make sure to have a listener running at the relevant port before executing the next step.
@@ -98,7 +98,7 @@ service / on new http:Listener(9090) {
 }
 ```
 
-#### Step 08: Copy the sample installation URL and paste it on a web browser. ![image-3](docs/setup/resources/image-3.png)
+#### Step 08: Copy the sample installation URL and paste it on a web browser. ![image-3](docs/resources/setup/image-3.png)
 
 * Browser pop the HubSpost account and ask where to install the App then select your developer test account 
 * You will receive a code from there and it will be displayed on the browser

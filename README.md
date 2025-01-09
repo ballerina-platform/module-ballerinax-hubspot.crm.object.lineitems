@@ -14,17 +14,15 @@ The `ballerinax/hubspot.crm.object.lineitems` package offers APIs to connect and
 
 # Setup guide
 
+To use the HubSpot Properties connector, you must have access to the HubSpot API through a HubSpot developer account and a HubSpot App under it. Therefore, you need to register for a developer account at HubSpot if you don't have one already. 
 
-You need a [HubSpot developer account](https://developers.hubspot.com/get-started) with an [app](https://developers.hubspot.com/docs/guides/apps/public-apps/overview) to use HubSpot connectors.
-To obtain an authentication token for your HubSpot developer account, you can use OAuth for public apps. 
+#### Step 01 : Create/ Login to a HubSpot Developer Account
 
-### Using OAuth for Public Apps:
+ If you have an account already go to the [Hubspot account portal](https://app.hubspot.com/myaccounts-beta)
 
-#### Step 01 : Create Developer Account
-* If you have an account already go to the [Hubspot account portal](https://app.hubspot.com/myaccounts-beta)
-* If you don't have a developer account, register for a free Hubspot developer account.[(click here)](https://app.hubspot.com/signup-hubspot/developers?_ga=2.207749649.2047916093.1734412948-232493525.1734412948&step=landing_page)
+ If you don't have a developer account, register for a free Hubspot developer account.[(click here)](https://app.hubspot.com/signup-hubspot/developers?_ga=2.207749649.2047916093.1734412948-232493525.1734412948&step=landing_page)
 
-#### Step 02 : Create a [Developer test account](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts):
+#### Step 02 (Optional) : Create a [Developer test account](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts):
 Within app developer accounts, you can create developer test accounts to test apps and integrations without affecting any real HubSpot data.
 
 Note: These accounts are only for development and testing purposes. In production you should not use Developer Test Accounts.
@@ -40,78 +38,101 @@ Note: These accounts are only for development and testing purposes. In productio
 
 3. Create developer test account by providing a name
 
-#### Step 03 : Create a HubSpot App:
+#### Step 03 : Create a HubSpot App under your account
 
-  * In your developer account, navigate to the [Apps](https://app.hubspot.com/developer/48567544/applications) section.
-Click on `Create App` and provide the necessary details, including the app name and description to create a Hubspot developer App.
+  1. In your developer account, navigate to the [Apps](https://app.hubspot.com/developer/48567544/applications) section.
+Click on `Create App`
 ![create app](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/create_app_1.png)
 
-#### Step 04 : Initiate the OAuth Flow:
+2. Provide the necessary details, including the app name and description.
 
-* Move to the auth tab in the created app and set the permissions there ![alt text](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/image.png)
+#### Step 04 : Configure the Authentication Flow
 
-*  This direct users to HubSpot's authorisation URL with the following query parameters:
+1. Move to the Auth tab.
+![alt text](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/image.png)
 
-`client_id`: Your app's Client ID.
+2. In the Scopes section, add necessary scopes for your app using the "Add new scope" button.  
+   ![Hubspot set scope](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/image-2.png)
 
-`redirect_uri`: The URL users will be redirected to after granting access.
-
-`scope`: A space-separated list of scopes your app is requesting.
-
-
-#### Step 05: Scope selection: 
-
-* Go to the [crm.objects.line-items API reference](https://developers.hubspot.com/docs/reference/api/crm/objects/line-items) and there you will see the scope has defined below way![Scope selection](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/image-1.png)
-
-* Now come back to your Auth page and add the relevant scopes using the `Add new scope` button ![alt text](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/image-2.png)
-
-#### Step 06: Add redirect URL
-Add your Redirect URL in the relevant section. You can also use `localhost` addresses for localhost development purposes. ![redirect url](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/image-3.png)
-
-#### Step 07 (For localhost redirect url): Activate ballerina service
-* If you are using a 'localhost' redirect url, make sure to have a listener running at the relevant port before executing the next step.
-* Use the following ballerina code and run it locally on your computer using `bal run` to activate the service. 
-
-``` bash
-import ballerina/http;
-import ballerina/io;
+3. Add your Redirect URI in the relevant section. You can also use localhost addresses for local development purposes. Click Create App.  
+   ![Hubspot create app final](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/create_app_final.png)
 
 
-service / on new http:Listener(9090) {
-   resource function get .(http:Caller caller, http:Request req) returns error? {
-       // Extract the "code" query parameter from the URL
-       string? code = req.getQueryParamValue("code");
+#### Step 5: Get your Client ID and Client Secret
 
+- Navigate to the Auth section of your app. Make sure to save the provided Client ID and Client Secret.  
+  ![Hubspot get credentials](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/get_credentials.png)
 
-       if code is string {
-           // Log the received code
-           io:println("Authorization code received: " + code);
-           // Respond to the client with the received code
-           check caller->respond("Received code: " + code);
-       } else {
-           // Respond with an error message if no code is found
-           check caller->respond("Authorization code not found.");
-       }
-   }
-}
-```
+#### Step 6: Setup Authentication Flow
 
-#### Step 08: Copy the sample installation URL and paste it on a web browser. ![image-3](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/image-3.png)
+Before proceeding with the Quickstart, ensure you have obtained the Access Token using the following steps:
 
-* Browser pop the HubSpost account and ask where to install the App then select your developer test account 
-* You will receive a code from there and it will be displayed on the browser
+1. Create an authorization URL using the following format:
 
+   ```
+   https://app.hubspot.com/oauth/authorize?client_id=<YOUR_CLIENT_ID>&scope=<YOUR_SCOPES>&redirect_uri=<YOUR_REDIRECT_URI>
+   ```
 
-#### Step 09: Get the Refresh & Access tokens
-Run the following curl command. Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI`> and `<YOUR_CLIENT_SECRET>` with your specific value. Use the code you received in the above step 8 as the `<CODE>`.
+   Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI>` and `<YOUR_SCOPES>` with your specific value.
 
-``` bash
-curl --request POST \
-  --url https://api.hubapi.com/oauth/v1/token \
-  --header 'content-type: application/x-www-form-urlencoded' \
-  --data 'grant_type=authorization_code&code=<code>&redirect_uri=http://localhost:9090&client_id=<client_id>&client_secret=<client_secret>'
-```
-* Then execute this in terminal. This command will return the access token necessary for API calls.
+2. Paste it in the browser and select your developer test account to intall the app when prompted.
+3. A code will be displayed in the browser. Copy the code.
+
+   ```
+   Received code: na1-129d-860c-xxxx-xxxx-xxxxxxxxxxxx
+   ```
+
+4. Run the following ballerina program or curl command. Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI`> and `<YOUR_CLIENT_SECRET>` with your specific value. Use the code you received in the above step 3 as the `<CODE>`.
+
+- Ballerina Program
+
+```ballerina
+      import ballerina/http;
+      import ballerina/io;
+
+      configurable string clientId = ?;
+      configurable string clientSecret = ?;
+      configurable string redirectUri = ?;
+      configurable string code = ?;
+
+      public function main() returns error? {
+         http:Client hubspotClient = check new ("https://api.hubapi.com");
+
+         // Construct the form-urlencoded payload
+         string payload = string `grant_type=authorization_code&code=${code}&redirect_uri=${redirectUri}&client_id=${clientId}&client_secret=${clientSecret}`;
+
+         http:Request tokenRequest = new;
+         tokenRequest.setPayload(payload);
+         tokenRequest.setHeader("Content-Type", "application/x-www-form-urlencoded");
+
+         // Send POST request to fetch the access token
+         http:Response tokenResponse = check hubspotClient->post("/oauth/v1/token", tokenRequest);
+
+         // Parse and print the response
+         json responseJson = check tokenResponse.getJsonPayload();
+         io:println("Access and Refresh Token Response: ", responseJson);
+      }
+   ```
+
+   - Linux/macOS
+
+     ```bash
+     curl --request POST \
+     --url https://api.hubapi.com/oauth/v1/token \
+     --header 'content-type: application/x-www-form-urlencoded' \
+     --data 'grant_type=authorization_code&code=<CODE>&redirect_uri=<YOUR_REDIRECT_URI>&client_id=<YOUR_CLIENT_ID>&client_secret=<YOUR_CLIENT_SECRET>'
+     ```
+
+   - Windows
+
+     ```bash
+     curl --request POST ^
+     --url https://api.hubapi.com/oauth/v1/token ^
+     --header 'content-type: application/x-www-form-urlencoded' ^
+     --data 'grant_type=authorization_code&code=<CODE>&redirect_uri=<YOUR_REDIRECT_URI>&client_id=<YOUR_CLIENT_ID>&client_secret=<YOUR_CLIENT_SECRET>'
+     ```
+
+   This command will return the access token necessary for API calls.
 
    ```json
    {
@@ -122,8 +143,7 @@ curl --request POST \
    }
    ```
 
-Store the access token securely for use in your application.
-
+5. Store the access token securely for use in your application.
 
 # Quickstart
 

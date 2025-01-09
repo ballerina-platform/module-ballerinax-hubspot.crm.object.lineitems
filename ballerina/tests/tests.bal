@@ -14,6 +14,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/os;
 import ballerina/http;
 import ballerina/oauth2;
 import ballerina/test;
@@ -21,7 +22,7 @@ import ballerina/test;
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
-configurable boolean isLiveServer = ?;
+boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
 configurable string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/line_items" : "http://localhost:9090";
 
 //test variables
@@ -35,13 +36,13 @@ OAuth2RefreshTokenGrantConfig auth = {
     credentialBearer: oauth2:POST_BODY_BEARER // this line should be added in to when you are going to create auth object.
 };
 
-final Client hubspot = check new ({auth});
+final Client hsLineItems = check new ({auth});
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testGetLineofItems() returns error? {
-    CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hubspot->/.get(
+    CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hsLineItems->/.get(
     );
     test:assertTrue(response?.results != [], "Line items not found");
 }
@@ -50,7 +51,7 @@ isolated function testGetLineofItems() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 function testPostLineofItems() returns error? {
-    SimplePublicObject response = check hubspot->/.post(
+    SimplePublicObject response = check hsLineItems->/.post(
         payload = {
             "associations": [
                 {
@@ -87,7 +88,7 @@ function testPostLineofItems() returns error? {
     dependsOn: [testPostLineofItems]
 }
 function testGetlineItem() returns error? {
-    SimplePublicObjectWithAssociations response = check hubspot->/[lineitem_id].get();
+    SimplePublicObjectWithAssociations response = check hsLineItems->/[lineitem_id].get();
     test:assertTrue(response?.id == lineitem_id, "Line item not found");
 }
 
@@ -96,7 +97,7 @@ function testGetlineItem() returns error? {
     dependsOn: [testGetlineItem]
 }
 function testUpdateProperties() returns error? {
-    SimplePublicObject response = check hubspot->/[lineitem_id].patch(
+    SimplePublicObject response = check hsLineItems->/[lineitem_id].patch(
         payload = {
             "objectWriteTraceId": "2",
             "properties": {
@@ -117,7 +118,7 @@ function testUpdateProperties() returns error? {
     dependsOn: [testUpdateProperties]
 }
 function testDeleteLineItem() returns error? {
-    http:Response response = check hubspot->/[lineitem_id].delete();
+    http:Response response = check hsLineItems->/[lineitem_id].delete();
     test:assertTrue(response.statusCode == 204);
 }
 
@@ -125,7 +126,7 @@ function testDeleteLineItem() returns error? {
     groups: ["live_tests"]
 }
 function testCreatebatchofLineItems() returns error? {
-    BatchResponseSimplePublicObject response = check hubspot->/batch/create.post(
+    BatchResponseSimplePublicObject response = check hsLineItems->/batch/create.post(
         payload = {
 
             "inputs": [
@@ -166,7 +167,7 @@ function testCreatebatchofLineItems() returns error? {
     dependsOn: [testCreatebatchofLineItems]
 }
 function testReadbatchofLineItems() returns error? {
-    BatchResponseSimplePublicObject response = check hubspot->/batch/read.post(
+    BatchResponseSimplePublicObject response = check hsLineItems->/batch/read.post(
         payload = {
             "propertiesWithHistory": [
                 "name"
@@ -189,7 +190,7 @@ function testReadbatchofLineItems() returns error? {
     dependsOn: [testReadbatchofLineItems]
 }
 function testUpdatebatchofLineItems() returns error? {
-    BatchResponseSimplePublicObject response = check hubspot->/batch/update.post(
+    BatchResponseSimplePublicObject response = check hsLineItems->/batch/update.post(
         payload = {
             "inputs": [
                 {
@@ -228,7 +229,7 @@ isolated function testUpsertbatchofLineItems() returns error? {
             }
         ]
     };
-    BatchResponseSimplePublicUpsertObject response = check hubspot->/batch/upsert.post(payload);
+    BatchResponseSimplePublicUpsertObject response = check hsLineItems->/batch/upsert.post(payload);
     test:assertTrue(response?.results != [], "Line items not found");
 }
 
@@ -237,7 +238,7 @@ isolated function testUpsertbatchofLineItems() returns error? {
 }
 
 isolated function testSearchBatchofLineItems() returns error? {
-    CollectionResponseWithTotalSimplePublicObjectForwardPaging response = check hubspot->/search.post(
+    CollectionResponseWithTotalSimplePublicObjectForwardPaging response = check hsLineItems->/search.post(
         payload = {
             "query": "Item",
             "limit": 5,
@@ -258,7 +259,7 @@ isolated function testSearchBatchofLineItems() returns error? {
     dependsOn: [testUpdatebatchofLineItems]
 }
 function testArchivebatchofLineItem() returns error? {
-    http:Response response = check hubspot->/batch/archive.post(
+    http:Response response = check hsLineItems->/batch/archive.post(
         payload = {
             "inputs": [
                 {

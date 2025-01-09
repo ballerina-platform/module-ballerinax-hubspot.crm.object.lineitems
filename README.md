@@ -174,7 +174,7 @@ Now, utilize the available connector operations. A sample usecase is shown below
 
 ```bash
 public function main() returns error? {
-    SimplePublicObjectInputForCreate payload = {
+    hslineitems:SimplePublicObjectInputForCreate payload = {
 
     "associations": [
     {
@@ -197,8 +197,7 @@ public function main() returns error? {
     }
   };
   
-   SimplePublicObject response = check HubSpotClient->/crm/v3/objects/line_items.post(payload);
-   io:println(response);
+   hslineitems::SimplePublicObject response = check hubSpotLineItems->/crm/v3/objects/line_items.post(payload);
 }
 ```
 #### Step 4 : Run the Ballerina application

@@ -5,8 +5,8 @@ name = "hubspot.crm.obj.lineitems"
 version = "0.1.0"
 license = ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = [] # TODO: Add keywords
-# icon = "icon.png" # TODO: Add icon
+keywords = ["HubSpot", "CRM", "Object", "LineItems","API", "Inventory Management", "E-commerce"]
+icon = "icon.png"
 repository = "https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems"
 
 [build-options]

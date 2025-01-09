@@ -37,35 +37,36 @@ final hslineitems:Client hubspot = check new hslineitems:Client(config);
 
 public function main() returns error? {
     // Step 1:  Add New Lineitems to an Inventory deal
-    hslineitems:SimplePublicObjectInputForCreate lineItem ={
+    hslineitems:SimplePublicObjectInputForCreate lineItem = {
         "associations": [
-        {
-            "types": [
             {
-            "associationCategory": "HUBSPOT_DEFINED",
-            "associationTypeId": 20
+                "types": [
+                    {
+                        "associationCategory": "HUBSPOT_DEFINED",
+                        "associationTypeId": 20
+                    }
+                ],
+                "to": {
+                    "id": "31232284502"
+                }
+
             }
         ],
-        "to": {
-            "id": "31232284502"
+        "objectWriteTraceId": "2",
+        "properties": {
+            "price": "2400.00",
+            "quantity": "5",
+            "name": "Wired Keyboard"
         }
-        
-        }
-    ],"objectWriteTraceId": "2",
-    "properties": {
-        "price": "2400.00",
-        "quantity": "5",
-        "name": "Wired Keyboard"
-    }
     };
-    
+
     hslineitems:SimplePublicObject lineitem_response = check hubspot->/.post(payload = lineItem);
     lineitem_id = lineitem_response.id;
     io:println("Line item created successfully. Line item id: " + lineitem_id);
 
     // Step 2: Retrieve the existing products in the inventory deal
     hslineitems:CollectionResponseSimplePublicObjectWithAssociationsForwardPaging items_response = check hubspot->/.get();
-    io:println("Line items retrieved successfully. Line items: ",items_response.results);
+    io:println("Line items retrieved successfully. Line items: ", items_response.results);
 
     // Step 3: Update Product Information Based on Operational Needs
     hslineitems:SimplePublicObject update_response = check hubspot->/[lineitem_id].patch(
@@ -82,75 +83,76 @@ public function main() returns error? {
 
     // Step 4: Check if a particular product exists by checking with its id
     hslineitems:SimplePublicObjectWithAssociations readitem_response = check hubspot->/[lineitem_id].get();
-    io:println("Product already exists. Details: ",readitem_response);
+    io:println("Product already exists. Details: ", readitem_response);
 
     // Step 5: Add a batch of new products
     hslineitems:BatchInputSimplePublicObjectInputForCreate batch_payload = {
         "inputs": [
             {
-            "associations": [
-                {
-                "types": [
+                "associations": [
                     {
-                    "associationCategory": "HUBSPOT_DEFINED",
-                    "associationTypeId": 20
+                        "types": [
+                            {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 20
+                            }
+                        ],
+                        "to": {
+                            "id": "31232284502"
+                        }
                     }
                 ],
-                "to": {
-                    "id": "31232284502"
+                "objectWriteTraceId": "1",
+                "properties": {
+                    "price": "5500.00",
+                    "quantity": "1",
+                    "name": "Gaming headphone"
                 }
-                }
-            ],
-            "objectWriteTraceId": "1",
-            "properties": {
-                "price": "5500.00",
-                "quantity": "1",
-                "name": "Gaming headphone"
-            }
             },
             {
-            "associations": [
-                {
-                "types": [
+                "associations": [
                     {
-                    "associationCategory": "HUBSPOT_DEFINED",
-                    "associationTypeId": 20
+                        "types": [
+                            {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 20
+                            }
+                        ],
+                        "to": {
+                            "id": "31232284502"
+                        }
                     }
                 ],
-                "to": {
-                    "id": "31232284502"
+                "objectWriteTraceId": "2",
+                "properties": {
+                    "price": "400.00",
+                    "quantity": "3",
+                    "name": "Wireless mouse"
                 }
-                }
-            ],
-            "objectWriteTraceId": "2",
-            "properties": {
-                "price": "400.00",
-                "quantity": "3",
-                "name": "Wireless mouse"
-            }
-            },{
-            "associations": [
-                {
-                "types": [
+            },
+            {
+                "associations": [
                     {
-                    "associationCategory": "HUBSPOT_DEFINED",
-                    "associationTypeId": 20
+                        "types": [
+                            {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 20
+                            }
+                        ],
+                        "to": {
+                            "id": "31232284502"
+                        }
                     }
                 ],
-                "to": {
-                    "id": "31232284502"
+                "objectWriteTraceId": "3",
+                "properties": {
+                    "price": "25000.00",
+                    "quantity": "1",
+                    "name": "Play station"
                 }
-                }
-            ],
-            "objectWriteTraceId": "3",
-            "properties": {
-                "price": "25000.00",
-                "quantity": "1",
-                "name": "Play station"
-            }
             }
         ]
     };
-    hslineitems:BatchResponseSimplePublicObject response = check hubspot->/batch/create.post(payload = batch_payload); 
+    hslineitems:BatchResponseSimplePublicObject response = check hubspot->/batch/create.post(payload = batch_payload);
     io:println("Batch of new line items added successfully");
 }

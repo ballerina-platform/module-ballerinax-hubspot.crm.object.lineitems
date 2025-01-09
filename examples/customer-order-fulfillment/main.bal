@@ -14,9 +14,9 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/http;
 import ballerina/io;
 import ballerina/oauth2;
-import ballerina/http;
 import ballerinax/hubspot.crm.obj.lineitems as hslineitems;
 
 configurable string clientId = ?;
@@ -42,112 +42,113 @@ public function main() returns error? {
     hslineitems:BatchInputSimplePublicObjectInputForCreate batch_payload = {
         "inputs": [
             {
-            "associations": [
-                {
-                "types": [
+                "associations": [
                     {
-                    "associationCategory": "HUBSPOT_DEFINED",
-                    "associationTypeId": 20
+                        "types": [
+                            {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 20
+                            }
+                        ],
+                        "to": {
+                            "id": "31232284502"
+                        }
                     }
                 ],
-                "to": {
-                    "id": "31232284502"
+                "objectWriteTraceId": "1",
+                "properties": {
+                    "price": "55000.00",
+                    "quantity": "1",
+                    "name": "Dining Table"
                 }
-                }
-            ],
-            "objectWriteTraceId": "1",
-            "properties": {
-                "price": "55000.00",
-                "quantity": "1",
-                "name": "Dining Table"
-            }
             },
             {
-            "associations": [
-                {
-                "types": [
+                "associations": [
                     {
-                    "associationCategory": "HUBSPOT_DEFINED",
-                    "associationTypeId": 20
+                        "types": [
+                            {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 20
+                            }
+                        ],
+                        "to": {
+                            "id": "31232284502"
+                        }
                     }
                 ],
-                "to": {
-                    "id": "31232284502"
+                "objectWriteTraceId": "2",
+                "properties": {
+                    "price": "12000.00",
+                    "quantity": "3",
+                    "name": "Office Chair"
                 }
-                }
-            ],
-            "objectWriteTraceId": "2",
-            "properties": {
-                "price": "12000.00",
-                "quantity": "3",
-                "name": "Office Chair"
-            }
-            },{
-            "associations": [
-                {
-                "types": [
-                    {
-                    "associationCategory": "HUBSPOT_DEFINED",
-                    "associationTypeId": 20
-                    }
-                ],
-                "to": {
-                    "id": "31232284502"
-                }
-                }
-            ],
-            "objectWriteTraceId": "3",
-            "properties": {
-                "price": "75000.00",
-                "quantity": "1",
-                "name": "Sofa"
-            }
             },
             {
-            "associations": [
-                {
-                "types": [
+                "associations": [
                     {
-                    "associationCategory": "HUBSPOT_DEFINED",
-                    "associationTypeId": 20
+                        "types": [
+                            {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 20
+                            }
+                        ],
+                        "to": {
+                            "id": "31232284502"
+                        }
                     }
                 ],
-                "to": {
-                    "id": "31232284502"
+                "objectWriteTraceId": "3",
+                "properties": {
+                    "price": "75000.00",
+                    "quantity": "1",
+                    "name": "Sofa"
                 }
-                }
-            ],
-            "objectWriteTraceId": "4",
-            "properties": {
-                "price": "8500.00",
-                "quantity": "2",
-                "name": "Casual Chair"
-            }
             },
             {
-            "associations": [
-                {
-                "types": [
+                "associations": [
                     {
-                    "associationCategory": "HUBSPOT_DEFINED",
-                    "associationTypeId": 20
+                        "types": [
+                            {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 20
+                            }
+                        ],
+                        "to": {
+                            "id": "31232284502"
+                        }
                     }
                 ],
-                "to": {
-                    "id": "31232284502"
+                "objectWriteTraceId": "4",
+                "properties": {
+                    "price": "8500.00",
+                    "quantity": "2",
+                    "name": "Casual Chair"
                 }
+            },
+            {
+                "associations": [
+                    {
+                        "types": [
+                            {
+                                "associationCategory": "HUBSPOT_DEFINED",
+                                "associationTypeId": 20
+                            }
+                        ],
+                        "to": {
+                            "id": "31232284502"
+                        }
+                    }
+                ],
+                "objectWriteTraceId": "5",
+                "properties": {
+                    "price": "5000.00",
+                    "quantity": "3",
+                    "name": "Kids Chair"
                 }
-            ],
-            "objectWriteTraceId": "5",
-            "properties": {
-                "price": "5000.00",
-                "quantity": "3",
-                "name": "Kids Chair"
-            }
             }
         ]
     };
-    hslineitems:BatchResponseSimplePublicObject response = check hubspot->/batch/create.post(payload = batch_payload); 
+    hslineitems:BatchResponseSimplePublicObject response = check hubspot->/batch/create.post(payload = batch_payload);
     io:println("Batch of new line items added successfully");
 
     foreach var result in response.results {
@@ -157,21 +158,21 @@ public function main() returns error? {
     //Step 2:After creating the batch, the warehouse manager verifies its contents to ensure accuracy.
     foreach string batch_id in batchitemIds {
         hslineitems:BatchResponseSimplePublicObject batchitems_response = check hubspot->/batch/read.post(
-        payload = {
-            "propertiesWithHistory": [
-            "name"
-            ], 
-            "inputs": [
-            {
-            "id": batch_id
+            payload = {
+                "propertiesWithHistory": [
+                    "name"
+                ],
+                "inputs": [
+                    {
+                        "id": batch_id
+                    }
+                ],
+                "properties": [
+                    "quantity"
+                ]
             }
-            ],
-            "properties": [
-            "quantity"
-            ]
-        }
         );
-        io:println("Line items in the batch with ID: " , batchitems_response.results[0].id ," is verified successfully");  
+        io:println("Line items in the batch with ID: ", batchitems_response.results[0].id, " is verified successfully");
     }
 
     //Step 3: The warehouse manager searches for items in the order to update the stock levels.
@@ -179,7 +180,7 @@ public function main() returns error? {
         payload = {
             "query": "Chair",
             "limit": 5,
-            
+
             "sorts": [
                 "price"
             ],
@@ -196,10 +197,10 @@ public function main() returns error? {
         hslineitems:BatchInputSimplePublicObjectBatchInput update_payload = {
             "inputs": [
                 {
-                "id": batch_id,
-                "properties": {
-                    "quantity": "2"
-                }
+                    "id": batch_id,
+                    "properties": {
+                        "quantity": "2"
+                    }
                 }
             ]
         };
@@ -210,18 +211,16 @@ public function main() returns error? {
     //Step 5: Delete the batch of items from the inventory after the order is fulfilled.
     foreach string batch_id in batchitemIds {
         http:Response delete_response = check hubspot->/batch/archive.post(
-        payload ={
-            "inputs": [
-                {
-                    "id": batch_id
-                }
-            ]
+            payload = {
+                "inputs": [
+                    {
+                        "id": batch_id
+                    }
+                ]
 
-        }
-    );
+            }
+        );
         io:println(delete_response.statusCode, ": Item with ID: ", batch_id, " deleted successfully");
     }
 
-
-    
 }

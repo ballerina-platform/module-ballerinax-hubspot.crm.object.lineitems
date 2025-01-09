@@ -129,7 +129,7 @@ To use the `HubSpot CRM Object Line items` connector in your Ballerina applicati
 Import the `hubspot.crm.object.lineitems` module and `oauth2` module.
 
 ```ballerina
-import ballerinax/hubspot.crm.object.lineitems as hslineitems;
+import ballerinax/hubspot.crm.obj.lineitems as hslineitems;
 import ballerina/oauth2;
 ```
 

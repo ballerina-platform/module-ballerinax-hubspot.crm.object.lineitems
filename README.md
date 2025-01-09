@@ -187,19 +187,19 @@ public function main() returns error? {
       "to": {
         "id": "31232284502"
       }
+   }
       
-    }
   ],"objectWriteTraceId": "2",
   "properties": {
     "price": "400.00",
     "quantity": "10",
     "name": "Item 6"
-  }
+    }
+  };
   
-};
-    SimplePublicObject response = check HubSpotClient->/crm/v3/objects/line_items.post(payload);
-    io:println(response);
-
+   SimplePublicObject response = check HubSpotClient->/crm/v3/objects/line_items.post(payload);
+   io:println(response);
+}
 ```
 #### Step 4 : Run the Ballerina application
 

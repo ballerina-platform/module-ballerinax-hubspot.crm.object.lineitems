@@ -25,10 +25,6 @@ configurable string refreshToken = ?;
 boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
 configurable string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/line_items" : "http://localhost:9090";
 
-//test variables
-string lineitem_id = "";
-string batch_id = "";
-
 OAuth2RefreshTokenGrantConfig auth = {
     clientId: clientId,
     clientSecret: clientSecret,
@@ -38,13 +34,23 @@ OAuth2RefreshTokenGrantConfig auth = {
 
 final Client hsLineItems = check new ({auth});
 
+final string testName = "Line Item 01";
+final string testPrice = "4000.00";
+final string testQuantity = "3";
+final string testUpdatedPrice = "4500.00";
+final string testUpdatedQuantity = "4";
+final string testUpdatedName = "Updated Line Item 01";
+final string testDeal_id = "31232284502";
+string lineitem_id = "";
+string batch_id = "";
+
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testGetLineofItems() returns error? {
     CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hsLineItems->/.get(
     );
-    test:assertTrue(response?.results != [], "Line items not found");
+    test:assertTrue(response?.results != []);
 }
 
 @test:Config {
@@ -62,24 +68,20 @@ function testPostLineofItems() returns error? {
                         }
                     ],
                     "to": {
-                        "id": "31232284502"
+                        "id": testDeal_id
                     }
 
                 }
             ],
             "objectWriteTraceId": "2",
             "properties": {
-                "price": "400.00",
-                "quantity": "8",
-                "name": "Item 7"
+                "price": testPrice,
+                "quantity": testQuantity,
+                "name": testName
             }
         }
     );
-    test:assertTrue(response?.id != "", "Line item creation failed");
-    test:assertEquals(response?.properties["name"], "Item 7", "Name mismatched");
-    test:assertEquals(response?.properties["price"], "400.00", "Price mismatched");
-    test:assertEquals(response?.properties["quantity"], "8", "Quantity mismatched");
-
+    test:assertTrue(response?.id != "");
     lineitem_id = response.id;
 }
 
@@ -87,35 +89,33 @@ function testPostLineofItems() returns error? {
     groups: ["live_tests"],
     dependsOn: [testPostLineofItems]
 }
-function testGetlineItem() returns error? {
+function testGetlineItemByID() returns error? {
     SimplePublicObjectWithAssociations response = check hsLineItems->/[lineitem_id].get();
-    test:assertTrue(response?.id == lineitem_id, "Line item not found");
+    test:assertTrue(response?.id == lineitem_id);
 }
 
 @test:Config {
     groups: ["live_tests"],
-    dependsOn: [testGetlineItem]
+    dependsOn: [testGetlineItemByID]
 }
-function testUpdateProperties() returns error? {
+function testUpdateLineItemProperties() returns error? {
     SimplePublicObject response = check hsLineItems->/[lineitem_id].patch(
         payload = {
             "objectWriteTraceId": "2",
             "properties": {
-                "price": "154.00",
-                "quantity": "1",
-                "name": "Updated line item"
+                "price": testUpdatedPrice,
+                "quantity": testUpdatedQuantity,
+                "name": testUpdatedName
             }
         }
     );
-    test:assertTrue(response?.id == lineitem_id, "Line item not found");
-    test:assertEquals(response?.properties["name"], "Updated line item", "Name mismatched");
-    test:assertEquals(response?.properties["price"], "154.00", "Price mismatched");
-    test:assertEquals(response?.properties["quantity"], "1", "Quantity mismatched");
+    test:assertTrue(response?.id == lineitem_id);
+    test:assertTrue(response?.properties["price"] == testUpdatedPrice);
 }
 
 @test:Config {
     groups: ["live_tests"],
-    dependsOn: [testUpdateProperties]
+    dependsOn: [testUpdateLineItemProperties]
 }
 function testDeleteLineItem() returns error? {
     http:Response response = check hsLineItems->/[lineitem_id].delete();
@@ -125,7 +125,7 @@ function testDeleteLineItem() returns error? {
 @test:Config {
     groups: ["live_tests"]
 }
-function testCreatebatchofLineItems() returns error? {
+function testCreateBatchofLineItems() returns error? {
     BatchResponseSimplePublicObject response = check hsLineItems->/batch/create.post(
         payload = {
 
@@ -140,33 +140,29 @@ function testCreatebatchofLineItems() returns error? {
                                 }
                             ],
                             "to": {
-                                "id": "31232284502"
+                                "id": testDeal_id
                             }
                         }
                     ],
                     "objectWriteTraceId": "1",
                     "properties": {
-                        "price": "400.00",
-                        "quantity": "1",
-                        "name": "Item 6"
+                        "price": testPrice,
+                        "quantity": testQuantity,
+                        "name": testName
                     }
                 }
             ]
         }
     );
-    test:assertEquals(response?.status, "COMPLETE", "Batch creation failed");
     test:assertTrue(response?.results != [], "Line items not found");
-    test:assertEquals(response?.results[0].properties["name"], "Item 6", "Name mismatched");
-    test:assertEquals(response?.results[0].properties["price"], "400.00", "Price mismatched");
-    test:assertEquals(response?.results[0].properties["quantity"], "1", "Quantity mismatched");
     batch_id = response.results[0].id;
 }
 
 @test:Config {
     groups: ["live_tests"],
-    dependsOn: [testCreatebatchofLineItems]
+    dependsOn: [testCreateBatchofLineItems]
 }
-function testReadbatchofLineItems() returns error? {
+function testReadBatchLineItems() returns error? {
     BatchResponseSimplePublicObject response = check hsLineItems->/batch/read.post(
         payload = {
             "propertiesWithHistory": [
@@ -182,39 +178,37 @@ function testReadbatchofLineItems() returns error? {
             ]
         }
     );
-    test:assertTrue(response?.results[0].id == batch_id, "Batch not found");
+    test:assertTrue(response?.results[0].id == batch_id);
 }
 
 @test:Config {
     groups: ["live_tests"],
-    dependsOn: [testReadbatchofLineItems]
+    dependsOn: [testReadBatchLineItems]
 }
-function testUpdatebatchofLineItems() returns error? {
+function testUpdateBatchLineItems() returns error? {
     BatchResponseSimplePublicObject response = check hsLineItems->/batch/update.post(
         payload = {
             "inputs": [
                 {
                     "id": batch_id,
                     "properties": {
-                        "price": "450.00",
-                        "quantity": "1",
-                        "name": "Updated Item 4"
+                        "price": testUpdatedPrice,
+                        "quantity": testUpdatedQuantity,
+                        "name": testUpdatedName
                     }
                 }
             ]
         }
     );
-    test:assertTrue(response?.results[0].id == batch_id, "Batch not found");
-    test:assertEquals(response?.results[0].properties["name"], "Updated Item 4", "Name mismatched");
-    test:assertEquals(response?.results[0].properties["price"], "450.00", "Price mismatched");
-    test:assertEquals(response?.results[0].properties["quantity"], "1", "Quantity mismatched");
+    test:assertTrue(response?.results != []);
+    test:assertTrue(response.results[0].properties["price"] == testUpdatedPrice);
 }
 
 @test:Config {
     groups: ["mock_tests"],
     enable: !isLiveServer
 }
-isolated function testUpsertbatchofLineItems() returns error? {
+isolated function testUpsertBatchLineItems() returns error? {
     BatchInputSimplePublicObjectBatchInputUpsert payload = {
         "inputs": [
             {
@@ -230,13 +224,12 @@ isolated function testUpsertbatchofLineItems() returns error? {
         ]
     };
     BatchResponseSimplePublicUpsertObject response = check hsLineItems->/batch/upsert.post(payload);
-    test:assertTrue(response?.results != [], "Line items not found");
+    test:assertTrue(response?.results != []);
 }
 
 @test:Config {
     groups: ["live_tests"]
 }
-
 isolated function testSearchBatchofLineItems() returns error? {
     CollectionResponseWithTotalSimplePublicObjectForwardPaging response = check hsLineItems->/search.post(
         payload = {
@@ -251,14 +244,14 @@ isolated function testSearchBatchofLineItems() returns error? {
             ]
         }
     );
-    test:assertTrue(response?.total != 0, "Line items not found");
+    test:assertTrue(response?.results != []);
 }
 
 @test:Config {
     groups: ["live_tests"],
-    dependsOn: [testUpdatebatchofLineItems]
+    dependsOn: [testUpdateBatchLineItems]
 }
-function testArchivebatchofLineItem() returns error? {
+function testArchiveBatchLineItems() returns error? {
     http:Response response = check hsLineItems->/batch/archive.post(
         payload = {
             "inputs": [

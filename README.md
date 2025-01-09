@@ -199,8 +199,12 @@ public function main() returns error? {
 };
     SimplePublicObject response = check HubSpotClient->/crm/v3/objects/line_items.post(payload);
     io:println(response);
-    return;
 
+```
+#### Step 4 : Run the Ballerina application
+
+```bash
+bal run
 ```
 
 # Examples

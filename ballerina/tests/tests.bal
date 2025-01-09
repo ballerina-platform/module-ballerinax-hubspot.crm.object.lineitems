@@ -14,9 +14,9 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/os;
 import ballerina/http;
 import ballerina/oauth2;
+import ballerina/os;
 import ballerina/test;
 
 configurable string clientId = ?;
@@ -47,7 +47,7 @@ string batch_id = "";
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
-isolated function testGetLineofItems() returns error? {
+function testGetLineofItems() returns error? {
     CollectionResponseSimplePublicObjectWithAssociationsForwardPaging response = check hsLineItems->/.get(
     );
     test:assertTrue(response?.results != []);
@@ -212,7 +212,7 @@ isolated function testUpsertBatchLineItems() returns error? {
     BatchInputSimplePublicObjectBatchInputUpsert payload = {
         "inputs": [
             {
-                "idProperty": "hs_object_id",
+                "idProperty": "hs_sku",
                 "objectWriteTraceId": "1",
                 "id": "27078953355",
                 "properties": {

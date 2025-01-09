@@ -33,7 +33,7 @@ hslineitems:OAuth2RefreshTokenGrantConfig auth = {
     credentialBearer: oauth2:POST_BODY_BEARER
 };
 
-final hslineitems:Client hsLineItems = check new ({ auth });
+final hslineitems:Client hsLineItems = check new ({auth});
 
 public function main() returns error? {
     //Step 1: Create a Batch of Products for an Order

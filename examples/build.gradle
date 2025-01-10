@@ -46,7 +46,7 @@ task testExamples {
 
 task buildExamples {
     gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(":hubspot.crm.object.lineitems-examples:test")) {
+        if (graph.hasTask(":hubspot.crm.obj.lineitems-examples:test")) {
             buildExamples.enabled = false
         } else {
             testExamples.enabled = false
@@ -70,8 +70,8 @@ task buildExamples {
     }
 }
 
-buildExamples.dependsOn ":hubspot.crm.object.lineitems-ballerina:build"
-testExamples.dependsOn ":hubspot.crm.object.lineitems-ballerina:build"
+buildExamples.dependsOn ":hubspot.crm.obj.lineitems-ballerina:build"
+testExamples.dependsOn ":hubspot.crm.obj.lineitems-ballerina:build"
 
 // TODO: Enable the examples build once https://github.com/ballerina-platform/ballerina-library/issues/6135 is fixed
 // test.dependsOn testExamples

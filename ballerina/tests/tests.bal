@@ -15,27 +15,34 @@
 // under the License.
 
 import ballerina/http;
-import ballerina/log;
 import ballerina/oauth2;
 import ballerina/os;
 import ballerina/test;
 
-configurable string clientId = ?;
-configurable string clientSecret = ?;
-configurable string refreshToken = ?;
-boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "false";
-configurable int localPort = 9090;
+final boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
+final string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/properties" : "http://localhost:9090";
 
-Client hsLineItems = test:mock(Client);
+final string clientId = os:getEnv("HUBSPOT_CLIENT_ID");
+final string clientSecret = os:getEnv("HUBSPOT_CLIENT_SECRET");
+final string refreshToken = os:getEnv("HUBSPOT_REFRESH_TOKEN");
 
-ConnectionConfig config = {
-    auth: {
-        clientId: clientId,
-        clientSecret: clientSecret,
-        refreshToken: refreshToken,
-        credentialBearer: oauth2:POST_BODY_BEARER // this line should be added in to when you are going to create auth object.
+final Client hsLineItems = check initClient();
+isolated function initClient() returns Client|error {
+    if isLiveServer {
+        OAuth2RefreshTokenGrantConfig auth = {
+            clientId: clientId,
+            clientSecret: clientSecret,
+            refreshToken: refreshToken,
+            credentialBearer: oauth2:POST_BODY_BEARER
+        };
+        return check new ({auth}, serviceUrl);
     }
-};
+    return check new ({
+        auth: {
+            token: "test-token"
+        }
+    }, serviceUrl);
+}
 
 final string testName = "Line Item 01";
 final string testPrice = "4000.00";
@@ -46,17 +53,6 @@ final string testUpdatedName = "Updated Line Item 01";
 final string testDeal_id = "31232284502";
 string lineitem_id = "";
 string batch_id = "";
-
-@test:BeforeSuite
-function setup() returns error? {
-    if isLiveServer {
-        log:printInfo("Starting Live Tests");
-        hsLineItems = check new (config);
-    } else {
-        log:printInfo("Starting Mock Tests");
-        hsLineItems = check new (config, string `http://localhost:${localPort}`);
-    }
-}
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
@@ -101,7 +97,8 @@ function testPostLineofItems() returns error? {
 
 @test:Config {
     groups: ["live_tests"],
-    dependsOn: [testPostLineofItems]
+    dependsOn: [testPostLineofItems],
+    enable: isLiveServer
 }
 function testGetlineItemByID() returns error? {
     SimplePublicObjectWithAssociations response = check hsLineItems->/[lineitem_id].get();
@@ -110,7 +107,8 @@ function testGetlineItemByID() returns error? {
 
 @test:Config {
     groups: ["live_tests"],
-    dependsOn: [testGetlineItemByID]
+    dependsOn: [testGetlineItemByID],
+    enable: isLiveServer
 }
 function testUpdateLineItemProperties() returns error? {
     SimplePublicObject response = check hsLineItems->/[lineitem_id].patch(
@@ -129,7 +127,8 @@ function testUpdateLineItemProperties() returns error? {
 
 @test:Config {
     groups: ["live_tests"],
-    dependsOn: [testUpdateLineItemProperties]
+    dependsOn: [testUpdateLineItemProperties],
+    enable: isLiveServer
 }
 function testDeleteLineItem() returns error? {
     http:Response response = check hsLineItems->/[lineitem_id].delete();
@@ -137,7 +136,8 @@ function testDeleteLineItem() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests"]
+    groups: ["live_tests"],
+    enable: isLiveServer
 }
 function testCreateBatchofLineItems() returns error? {
     BatchResponseSimplePublicObject response = check hsLineItems->/batch/create.post(
@@ -174,7 +174,8 @@ function testCreateBatchofLineItems() returns error? {
 
 @test:Config {
     groups: ["live_tests"],
-    dependsOn: [testCreateBatchofLineItems]
+    dependsOn: [testCreateBatchofLineItems],
+    enable: isLiveServer
 }
 function testReadBatchLineItems() returns error? {
     BatchResponseSimplePublicObject response = check hsLineItems->/batch/read.post(
@@ -197,7 +198,8 @@ function testReadBatchLineItems() returns error? {
 
 @test:Config {
     groups: ["live_tests"],
-    dependsOn: [testReadBatchLineItems]
+    dependsOn: [testReadBatchLineItems],
+    enable: isLiveServer
 }
 function testUpdateBatchLineItems() returns error? {
     BatchResponseSimplePublicObject response = check hsLineItems->/batch/update.post(
@@ -242,7 +244,8 @@ function testUpsertBatchLineItems() returns error? {
 }
 
 @test:Config {
-    groups: ["live_tests"]
+    groups: ["live_tests"],
+    enable: isLiveServer
 }
 function testSearchBatchofLineItems() returns error? {
     CollectionResponseWithTotalSimplePublicObjectForwardPaging response = check hsLineItems->/search.post(
@@ -263,7 +266,8 @@ function testSearchBatchofLineItems() returns error? {
 
 @test:Config {
     groups: ["live_tests"],
-    dependsOn: [testUpdateBatchLineItems]
+    dependsOn: [testUpdateBatchLineItems],
+    enable: isLiveServer
 }
 function testArchiveBatchLineItems() returns error? {
     http:Response response = check hsLineItems->/batch/archive.post(

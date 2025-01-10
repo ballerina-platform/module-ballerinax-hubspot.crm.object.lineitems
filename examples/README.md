@@ -1,14 +1,20 @@
 # Examples
 
-The `ballerinax/hubspot.crm.object.lineitems` connector provides practical examples illustrating usage in various scenarios.
+The `ballerinax/hubspot.crm.object.lineitems` connector provides practical examples illustrating usage in various scenarios. Explore these
 
-[//]: # (TODO: Add examples)
-1. 
-2. 
+1. [Customer Order fulfillment](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/tree/main/examples/customer-order-fulfillment) - Manage customer orders in a warehouse system
+2. [Inventory management](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/tree/main/examples/inventory-management) - Manage inventory for an operational deal in an E-commerce platform
 
 ## Prerequisites
 
-[//]: # (TODO: Add prerequisites)
+1. Generate hubspot credentials to authenticate the connector as described in the [setup guide](../README.md).
+
+2. For each example, create a `Config.toml` file with the related configuration. Here's an example of how your `Config.toml `file should look:
+    ```toml
+    clientId = "<Client ID>"
+    clientSecret = "<Client Secret>"
+    refreshToken = "<Access Token>"
+    ```
 
 ## Running an example
 

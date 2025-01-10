@@ -1,6 +1,6 @@
 # Examples
 
-The `ballerinax/hubspot.crm.object.lineitems` connector provides practical examples illustrating usage in various scenarios. Explore these
+The `ballerinax/hubspot.crm.obj.lineitems` connector provides practical examples illustrating usage in various scenarios. Explore these
 
 1. [Customer Order fulfillment](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/tree/main/examples/customer-order-fulfillment) - Manage customer orders in a warehouse system
 2. [Inventory management](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/tree/main/examples/inventory-management) - Manage inventory for an operational deal in an E-commerce platform

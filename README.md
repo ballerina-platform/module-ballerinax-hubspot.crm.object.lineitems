@@ -10,7 +10,7 @@
 
 [HubSpot](https://www.hubspot.com/our-story) is an AI-powered customer platform. 
 
-The `ballerinax/hubspot.crm.object.lineitems` package offers APIs to connect and interact with the [HubSpot CRM Lineitems API](https://developers.hubspot.com/docs/reference/api/crm/objects/line-items) endpoints, specially based on [HubSpot REST API v3](https://developers.hubspot.com/docs/reference/api).
+The `ballerinax/hubspot.crm.obj.lineitems` package offers APIs to connect and interact with the [HubSpot CRM Lineitems API](https://developers.hubspot.com/docs/reference/api/crm/objects/line-items) endpoints, specially based on [HubSpot REST API v3](https://developers.hubspot.com/docs/reference/api).
 
 # Setup guide
 
@@ -319,7 +319,7 @@ All the contributors are encouraged to read the [Ballerina Code of Conduct](http
 
 ## Useful links
 
-* For more information go to the [`hubspot.crm.object.lineitems` package](https://central.ballerina.io/ballerinax/hubspot.crm.object.lineitems/latest).
+* For more information go to the [`hubspot.crm.object.lineitems` package](https://central.ballerina.io/ballerinax/hubspot.crm.obj.lineitems/latest).
 * For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
 * Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
 * Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

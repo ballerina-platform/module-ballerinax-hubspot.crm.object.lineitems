@@ -66,17 +66,17 @@ Alternatively, you can set your authentication credentials as environment variab
 If you are using linux or mac, you can use following method:
 ```bash
    export IS_LIVE_SERVER=true
-   export CLIENT_ID="<Your Client Id>"
-   export CLIENT_SECRET="<Your Client Secret>"
-   export REFRESH_TOKEN="<Your Refresh Token>"
+   export HUBSPOT_CLIENT_ID="<Your Client Id>"
+   export HUBSPOT_CLIENT_SECRET="<Your Client Secret>"
+   export HUBSPOT_REFRESH_TOKEN="<Your Refresh Token>"
 ```
 
 If you are using Windows you can use following method:
 ```bash
    setx IS_LIVE_SERVER true
-   setx CLIENT_ID  <Your Client Id>
-   setx CLIENT_SECRET  <Your Client Secret>
-   setx REFRESH_TOKEN  <Your Refresh Token>
+   setx HUBSPOT_CLIENT_ID  <Your Client Id>
+   setx HUBSPOT_CLIENT_SECRET  <Your Client Secret>
+   setx HUBSPOT_REFRESH_TOKEN  <Your Refresh Token>
 ```
 Then, run the following command to run the tests:
 

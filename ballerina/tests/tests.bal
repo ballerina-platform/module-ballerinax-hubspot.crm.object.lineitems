@@ -17,12 +17,13 @@
 import ballerina/http;
 import ballerina/log;
 import ballerina/oauth2;
+import ballerina/os;
 import ballerina/test;
 
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
-configurable boolean isLiveServer = ?;
+boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "false";
 configurable int localPort = 9090;
 
 Client hsLineItems = test:mock(Client);

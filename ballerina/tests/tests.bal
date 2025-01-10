@@ -28,13 +28,14 @@ configurable int localPort = 9090;
 
 Client hsLineItems = test:mock(Client);
 
-OAuth2RefreshTokenGrantConfig auth = {
-    clientId: clientId,
-    clientSecret: clientSecret,
-    refreshToken: refreshToken,
-    credentialBearer: oauth2:POST_BODY_BEARER // this line should be added in to when you are going to create auth object.
+ConnectionConfig config = {
+    auth : {
+        clientId: clientId,
+        clientSecret: clientSecret,
+        refreshToken: refreshToken,
+        credentialBearer: oauth2:POST_BODY_BEARER // this line should be added in to when you are going to create auth object.
+    }
 };
-ConnectionConfig config = {auth};
 
 final string testName = "Line Item 01";
 final string testPrice = "4000.00";

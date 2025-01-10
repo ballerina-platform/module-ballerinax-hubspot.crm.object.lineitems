@@ -15,11 +15,8 @@
 // under the License.
 
 import ballerina/http;
-import ballerina/io;
 
-listener http:Listener httpListener = new (9090);
-
-http:Service mockService = service object {
+service on new http:Listener(localPort) {
     resource function post batch/upsert(@http:Payload BatchInputSimplePublicObjectBatchInputUpsert payload) returns BatchResponseSimplePublicUpsertObject {
         BatchResponseSimplePublicUpsertObject responseBody =
         {
@@ -226,13 +223,3 @@ http:Service mockService = service object {
     }
 
 };
-
-function init() returns error? {
-    if isLiveServer {
-        io:println("This is a live server. Mock service will not be started.");
-        return;
-    }
-    io:println("Starting mock service for Hubspot CRM Object Line Items");
-    check httpListener.attach(mockService, "/");
-    check httpListener.'start();
-}

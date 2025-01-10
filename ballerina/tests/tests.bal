@@ -15,6 +15,7 @@
 // under the License.
 
 import ballerina/http;
+import ballerina/log;
 import ballerina/oauth2;
 import ballerina/os;
 import ballerina/test;
@@ -23,7 +24,9 @@ configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
-configurable string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/line_items" : "http://localhost:9090";
+configurable int localPort = 9090;
+
+Client hsLineItems = test:mock(Client);
 
 OAuth2RefreshTokenGrantConfig auth = {
     clientId: clientId,
@@ -31,8 +34,7 @@ OAuth2RefreshTokenGrantConfig auth = {
     refreshToken: refreshToken,
     credentialBearer: oauth2:POST_BODY_BEARER // this line should be added in to when you are going to create auth object.
 };
-
-final Client hsLineItems = check new ({auth});
+ConnectionConfig config = {auth};
 
 final string testName = "Line Item 01";
 final string testPrice = "4000.00";
@@ -43,6 +45,17 @@ final string testUpdatedName = "Updated Line Item 01";
 final string testDeal_id = "31232284502";
 string lineitem_id = "";
 string batch_id = "";
+
+@test:BeforeSuite
+function setup() returns error? {
+    if isLiveServer {
+        log:printInfo("Starting Live Tests");
+        hsLineItems = check new (config);
+    } else {
+        log:printInfo("Starting Mock Tests");
+        hsLineItems = check new (config, string `http://localhost:${localPort}`);
+    }
+}
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
@@ -206,9 +219,9 @@ function testUpdateBatchLineItems() returns error? {
 
 @test:Config {
     groups: ["mock_tests"],
-    enable: false
+    enable: !isLiveServer
 }
-isolated function testUpsertBatchLineItems() returns error? {
+function testUpsertBatchLineItems() returns error? {
     BatchInputSimplePublicObjectBatchInputUpsert payload = {
         "inputs": [
             {
@@ -230,7 +243,7 @@ isolated function testUpsertBatchLineItems() returns error? {
 @test:Config {
     groups: ["live_tests"]
 }
-isolated function testSearchBatchofLineItems() returns error? {
+function testSearchBatchofLineItems() returns error? {
     CollectionResponseWithTotalSimplePublicObjectForwardPaging response = check hsLineItems->/search.post(
         payload = {
             "query": "Item",

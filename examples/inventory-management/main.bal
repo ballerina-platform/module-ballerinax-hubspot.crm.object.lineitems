@@ -21,13 +21,12 @@ import ballerinax/hubspot.crm.obj.lineitems as hslineitems;
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
-string lineitem_id = "";
-string batch_id = "";
+string lineitemID = "";
 
 hslineitems:OAuth2RefreshTokenGrantConfig auth = {
-    clientId: clientId,
-    clientSecret: clientSecret,
-    refreshToken: refreshToken,
+    clientId,
+    clientSecret,
+    refreshToken,
     credentialBearer: oauth2:POST_BODY_BEARER
 };
 
@@ -59,15 +58,15 @@ public function main() returns error? {
     };
 
     hslineitems:SimplePublicObject lineitem_response = check hsLineItems->/.post(payload = lineItem);
-    lineitem_id = lineitem_response.id;
-    io:println("Line item created successfully. Line item id: " + lineitem_id);
+    lineitemID = lineitem_response.id;
+    io:println("Line item created successfully. Line item id: " + lineitemID);
 
     // Step 2: Retrieve the existing products in the inventory deal
     hslineitems:CollectionResponseSimplePublicObjectWithAssociationsForwardPaging items_response = check hsLineItems->/.get();
     io:println("Line items retrieved successfully. Line items: ", items_response.results);
 
     // Step 3: Update Product Information Based on Operational Needs
-    hslineitems:SimplePublicObject update_response = check hsLineItems->/[lineitem_id].patch(
+    hslineitems:SimplePublicObject update_response = check hsLineItems->/[lineitemID].patch(
         payload = {
             "objectWriteTraceId": "2",
             "properties": {
@@ -80,7 +79,7 @@ public function main() returns error? {
     io:println("Line item updated successfully. Line item id: " + update_response.id);
 
     // Step 4: Check if a particular product exists by checking with its id
-    hslineitems:SimplePublicObjectWithAssociations readitem_response = check hsLineItems->/[lineitem_id].get();
+    hslineitems:SimplePublicObjectWithAssociations readitem_response = check hsLineItems->/[lineitemID].get();
     io:println("Product already exists. Details: ", readitem_response);
 
     // Step 5: Add a batch of new products

@@ -82,37 +82,7 @@ Before proceeding with the Quickstart, ensure you have obtained the Access Token
    Received code: na1-129d-860c-xxxx-xxxx-xxxxxxxxxxxx
    ```
 
-4. Run the following ballerina program or curl command. Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI`> and `<YOUR_CLIENT_SECRET>` with your specific value. Use the code you received in the above step 3 as the `<CODE>`.
-
-- Ballerina Program
-
-```ballerina
-      import ballerina/http;
-      import ballerina/io;
-
-      configurable string clientId = ?;
-      configurable string clientSecret = ?;
-      configurable string redirectUri = ?;
-      configurable string code = ?;
-
-      public function main() returns error? {
-         http:Client hubspotClient = check new ("https://api.hubapi.com");
-
-         // Construct the form-urlencoded payload
-         string payload = string `grant_type=authorization_code&code=${code}&redirect_uri=${redirectUri}&client_id=${clientId}&client_secret=${clientSecret}`;
-
-         http:Request tokenRequest = new;
-         tokenRequest.setPayload(payload);
-         tokenRequest.setHeader("Content-Type", "application/x-www-form-urlencoded");
-
-         // Send POST request to fetch the access token
-         http:Response tokenResponse = check hubspotClient->post("/oauth/v1/token", tokenRequest);
-
-         // Parse and print the response
-         json responseJson = check tokenResponse.getJsonPayload();
-         io:println("Access and Refresh Token Response: ", responseJson);
-      }
-   ```
+4. Run the following curl command. Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI`> and `<YOUR_CLIENT_SECRET>` with your specific value. Use the code you received in the above step 3 as the `<CODE>`.
 
    - Linux/macOS
 

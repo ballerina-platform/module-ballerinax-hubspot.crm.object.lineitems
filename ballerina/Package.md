@@ -6,7 +6,7 @@ The `ballerinax/hubspot.crm.object.lineitems` package offers APIs to connect and
 
 # Setup guide
 
-To use the HubSpot Properties connector, you must have access to the HubSpot API through a HubSpot developer account and a HubSpot App under it. Therefore, you need to register for a developer account at HubSpot if you don't have one already. 
+To use the HubSpot Line items connector, you must have access to the HubSpot API through a HubSpot developer account and a HubSpot App under it. Therefore, you need to register for a developer account at HubSpot if you don't have one already. 
 
 #### Step 01 : Create/ Login to a HubSpot Developer Account
 
@@ -43,7 +43,7 @@ Click on `Create App`
 1. Move to the Auth tab.
 ![alt text](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/image.png)
 
-2. In the Scopes section, add necessary scopes for your app using the "Add new scope" button. For line items API connector we will have to add the following 3 scopes in addition to existing `oauth` scope.
+2. In the Scopes section, add necessary scopes for your app using the "Add new scope" button. For line items API connector we will have to add the following 3 scopes in addition to the existing `oauth` scope.
 * `e-commerce`
 * `crm.objects.line_items.read`
 * `crm.objects.line_items.write`
@@ -69,16 +69,17 @@ Before proceeding with the Quickstart, ensure you have obtained the Access Token
    https://app.hubspot.com/oauth/authorize?client_id=<YOUR_CLIENT_ID>&scope=<YOUR_SCOPES>&redirect_uri=<YOUR_REDIRECT_URI>
    ```
 
-   Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI>` and `<YOUR_SCOPES>` with your specific value.
+   Replace `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI>` and `<YOUR_SCOPES>` with your specific value.
 
-2. Paste it in the browser and select your developer test account to intall the app when prompted.
+2. Paste it in the browser and select your developer test account to install the app when prompted.
+
 3. A code will be displayed in the browser. Copy the code.
 
    ```
    Received code: na1-129d-860c-xxxx-xxxx-xxxxxxxxxxxx
    ```
 
-4. Run the following curl command. Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI`> and `<YOUR_CLIENT_SECRET>` with your specific value. Use the code you received in the above step 3 as the `<CODE>`.
+4. Run the following curl command. Replace `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI`> and `<YOUR_CLIENT_SECRET>` with your specific value. Use the code you received in the above step 3 as the `<CODE>`.
 
 - Ballerina Program
 
@@ -119,7 +120,7 @@ To use the `HubSpot CRM Object Line items` connector in your Ballerina applicati
 
 #### Step 1: Import the module
 
-Import the `hubspot.crm.object.lineitems` module and `oauth2` module.
+Import the `hubspot.crm.obj.lineitems` module and `oauth2` module.
 
 ```ballerina
 import ballerinax/hubspot.crm.obj.lineitems as hslineitems;

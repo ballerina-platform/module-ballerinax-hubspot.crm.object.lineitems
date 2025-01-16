@@ -15,8 +15,8 @@ To use the HubSpot Properties connector, you must have access to the HubSpot API
 
  If you don't have a developer account, register for a free Hubspot developer account.[(click here)](https://app.hubspot.com/signup-hubspot/developers?_ga=2.207749649.2047916093.1734412948-232493525.1734412948&step=landing_page)
 
-#### Step 02 (Optional) : Create a [Developer test account](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts):
-Within app developer accounts, you can create developer test accounts to test apps and integrations without affecting any real HubSpot data.
+#### Step 02 (Optional) : Create a Developer test account:
+Within app developer accounts, you can create [Developer test accounts](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts) to test apps and integrations without affecting any real HubSpot data.
 
 Note: These accounts are only for development and testing purposes. In production you should not use Developer Test Accounts.
 
@@ -44,7 +44,11 @@ Click on `Create App`
 1. Move to the Auth tab.
 ![alt text](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/image.png)
 
-2. In the Scopes section, add necessary scopes for your app using the "Add new scope" button.  
+2. In the Scopes section, add necessary scopes for your app using the "Add new scope" button. For line items API connector we will have to add the following 3 scopes in addition to existing `oauth` scope.
+* `e-commerce`
+* `crm.objects.line_items.read`
+* `crm.objects.line_items.write`
+ 
    ![Hubspot set scope](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems/main/docs/setup/resources/image-2.png)
 
 3. Add your Redirect URI in the relevant section. You can also use localhost addresses for local development purposes. Click Create App.  

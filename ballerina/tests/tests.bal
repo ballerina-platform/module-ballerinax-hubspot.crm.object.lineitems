@@ -20,19 +20,20 @@ import ballerina/os;
 import ballerina/test;
 
 final boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
-final string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/properties" : "http://localhost:9090";
+final string serviceUrl = isLiveServer ? "https://api.hubapi.com/crm/v3/objects/line_items" : "http://localhost:9090";
 
 final string clientId = os:getEnv("HUBSPOT_CLIENT_ID");
 final string clientSecret = os:getEnv("HUBSPOT_CLIENT_SECRET");
 final string refreshToken = os:getEnv("HUBSPOT_REFRESH_TOKEN");
 
 final Client hsLineItems = check initClient();
+
 isolated function initClient() returns Client|error {
     if isLiveServer {
         OAuth2RefreshTokenGrantConfig auth = {
-            clientId: clientId,
-            clientSecret: clientSecret,
-            refreshToken: refreshToken,
+            clientId,
+            clientSecret,
+            refreshToken,
             credentialBearer: oauth2:POST_BODY_BEARER
         };
         return check new ({auth}, serviceUrl);
@@ -51,8 +52,8 @@ final string testUpdatedPrice = "4500.00";
 final string testUpdatedQuantity = "4";
 final string testUpdatedName = "Updated Line Item 01";
 final string testDeal_id = "31232284502";
-string lineitem_id = "";
-string batch_id = "";
+string lineItemId = "";
+string batchId = "";
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
@@ -92,7 +93,7 @@ function testPostLineofItems() returns error? {
         }
     );
     test:assertTrue(response?.id != "");
-    lineitem_id = response.id;
+    lineItemId = response.id;
 }
 
 @test:Config {
@@ -101,8 +102,8 @@ function testPostLineofItems() returns error? {
     enable: isLiveServer
 }
 function testGetlineItemByID() returns error? {
-    SimplePublicObjectWithAssociations response = check hsLineItems->/[lineitem_id].get();
-    test:assertTrue(response?.id == lineitem_id);
+    SimplePublicObjectWithAssociations response = check hsLineItems->/[lineItemId].get();
+    test:assertTrue(response?.id == lineItemId);
 }
 
 @test:Config {
@@ -111,7 +112,7 @@ function testGetlineItemByID() returns error? {
     enable: isLiveServer
 }
 function testUpdateLineItemProperties() returns error? {
-    SimplePublicObject response = check hsLineItems->/[lineitem_id].patch(
+    SimplePublicObject response = check hsLineItems->/[lineItemId].patch(
         payload = {
             "objectWriteTraceId": "2",
             "properties": {
@@ -121,7 +122,7 @@ function testUpdateLineItemProperties() returns error? {
             }
         }
     );
-    test:assertTrue(response?.id == lineitem_id);
+    test:assertTrue(response?.id == lineItemId);
     test:assertTrue(response?.properties["price"] == testUpdatedPrice);
 }
 
@@ -131,7 +132,7 @@ function testUpdateLineItemProperties() returns error? {
     enable: isLiveServer
 }
 function testDeleteLineItem() returns error? {
-    http:Response response = check hsLineItems->/[lineitem_id].delete();
+    http:Response response = check hsLineItems->/[lineItemId].delete();
     test:assertTrue(response.statusCode == 204);
 }
 
@@ -169,7 +170,7 @@ function testCreateBatchofLineItems() returns error? {
         }
     );
     test:assertTrue(response?.results != [], "Line items not found");
-    batch_id = response.results[0].id;
+    batchId = response.results[0].id;
 }
 
 @test:Config {
@@ -185,7 +186,7 @@ function testReadBatchLineItems() returns error? {
             ],
             "inputs": [
                 {
-                    "id": batch_id
+                    "id": batchId
                 }
             ],
             "properties": [
@@ -193,7 +194,7 @@ function testReadBatchLineItems() returns error? {
             ]
         }
     );
-    test:assertTrue(response?.results[0].id == batch_id);
+    test:assertTrue(response?.results[0].id == batchId);
 }
 
 @test:Config {
@@ -206,7 +207,7 @@ function testUpdateBatchLineItems() returns error? {
         payload = {
             "inputs": [
                 {
-                    "id": batch_id,
+                    "id": batchId,
                     "properties": {
                         "price": testUpdatedPrice,
                         "quantity": testUpdatedQuantity,
@@ -274,7 +275,7 @@ function testArchiveBatchLineItems() returns error? {
         payload = {
             "inputs": [
                 {
-                    "id": batch_id
+                    "id": batchId
                 }
             ]
 

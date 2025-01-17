@@ -23,7 +23,7 @@ configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 
-string batchID = "";
+string batchId = "";
 string[] batchitemIds = []; // Array to store batch item IDs
 
 hslineitems:OAuth2RefreshTokenGrantConfig auth = {
@@ -154,7 +154,7 @@ public function main() returns error? {
     }
 
     //Step 2:After creating the batch, the warehouse manager verifies its contents to ensure accuracy.
-    foreach string batchID in batchitemIds {
+    foreach string batchId in batchitemIds {
         hslineitems:BatchResponseSimplePublicObject batchitems_response = check hsLineItems->/batch/read.post(
             payload = {
                 "propertiesWithHistory": [
@@ -162,7 +162,7 @@ public function main() returns error? {
                 ],
                 "inputs": [
                     {
-                        "id": batchID
+                        "id": batchId
                     }
                 ],
                 "properties": [
@@ -191,11 +191,11 @@ public function main() returns error? {
     io:println("Total number of items found: ", searchitems_response.total);
 
     //Step 4: Update item quantities as per customer request before proceeding with the order.
-    foreach string batchID in batchitemIds {
+    foreach string batchId in batchitemIds {
         hslineitems:BatchInputSimplePublicObjectBatchInput update_payload = {
             "inputs": [
                 {
-                    "id": batchID,
+                    "id": batchId,
                     "properties": {
                         "quantity": "2"
                     }
@@ -207,18 +207,18 @@ public function main() returns error? {
     }
 
     //Step 5: Delete the batch of items from the inventory after the order is fulfilled.
-    foreach string batchID in batchitemIds {
+    foreach string batchId in batchitemIds {
         http:Response delete_response = check hsLineItems->/batch/archive.post(
             payload = {
                 "inputs": [
                     {
-                        "id": batchID
+                        "id": batchId
                     }
                 ]
 
             }
         );
-        io:println(delete_response.statusCode, ": Item with ID: ", batchID, " deleted successfully");
+        io:println(delete_response.statusCode, ": Item with ID: ", batchId, " deleted successfully");
     }
 
 }

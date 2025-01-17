@@ -52,8 +52,8 @@ final string testUpdatedPrice = "4500.00";
 final string testUpdatedQuantity = "4";
 final string testUpdatedName = "Updated Line Item 01";
 final string testDeal_id = "31232284502";
-string lineitemID = "";
-string batchID = "";
+string lineItemId = "";
+string batchId = "";
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
@@ -93,7 +93,7 @@ function testPostLineofItems() returns error? {
         }
     );
     test:assertTrue(response?.id != "");
-    lineitemID = response.id;
+    lineItemId = response.id;
 }
 
 @test:Config {
@@ -102,8 +102,8 @@ function testPostLineofItems() returns error? {
     enable: isLiveServer
 }
 function testGetlineItemByID() returns error? {
-    SimplePublicObjectWithAssociations response = check hsLineItems->/[lineitemID].get();
-    test:assertTrue(response?.id == lineitemID);
+    SimplePublicObjectWithAssociations response = check hsLineItems->/[lineItemId].get();
+    test:assertTrue(response?.id == lineItemId);
 }
 
 @test:Config {
@@ -112,7 +112,7 @@ function testGetlineItemByID() returns error? {
     enable: isLiveServer
 }
 function testUpdateLineItemProperties() returns error? {
-    SimplePublicObject response = check hsLineItems->/[lineitemID].patch(
+    SimplePublicObject response = check hsLineItems->/[lineItemId].patch(
         payload = {
             "objectWriteTraceId": "2",
             "properties": {
@@ -122,7 +122,7 @@ function testUpdateLineItemProperties() returns error? {
             }
         }
     );
-    test:assertTrue(response?.id == lineitemID);
+    test:assertTrue(response?.id == lineItemId);
     test:assertTrue(response?.properties["price"] == testUpdatedPrice);
 }
 
@@ -132,7 +132,7 @@ function testUpdateLineItemProperties() returns error? {
     enable: isLiveServer
 }
 function testDeleteLineItem() returns error? {
-    http:Response response = check hsLineItems->/[lineitemID].delete();
+    http:Response response = check hsLineItems->/[lineItemId].delete();
     test:assertTrue(response.statusCode == 204);
 }
 
@@ -170,7 +170,7 @@ function testCreateBatchofLineItems() returns error? {
         }
     );
     test:assertTrue(response?.results != [], "Line items not found");
-    batchID = response.results[0].id;
+    batchId = response.results[0].id;
 }
 
 @test:Config {
@@ -186,7 +186,7 @@ function testReadBatchLineItems() returns error? {
             ],
             "inputs": [
                 {
-                    "id": batchID
+                    "id": batchId
                 }
             ],
             "properties": [
@@ -194,7 +194,7 @@ function testReadBatchLineItems() returns error? {
             ]
         }
     );
-    test:assertTrue(response?.results[0].id == batchID);
+    test:assertTrue(response?.results[0].id == batchId);
 }
 
 @test:Config {
@@ -207,7 +207,7 @@ function testUpdateBatchLineItems() returns error? {
         payload = {
             "inputs": [
                 {
-                    "id": batchID,
+                    "id": batchId,
                     "properties": {
                         "price": testUpdatedPrice,
                         "quantity": testUpdatedQuantity,
@@ -275,7 +275,7 @@ function testArchiveBatchLineItems() returns error? {
         payload = {
             "inputs": [
                 {
-                    "id": batchID
+                    "id": batchId
                 }
             ]
 

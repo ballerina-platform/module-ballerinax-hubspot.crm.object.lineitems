@@ -208,7 +208,7 @@ public function main() returns error? {
 
     //Step 5: Delete the batch of items from the inventory after the order is fulfilled.
     foreach string batchId in batchitemIds {
-        http:Response delete_response = check hsLineItems->/batch/archive.post(
+        error? delete_response = check hsLineItems->/batch/archive.post(
             payload = {
                 "inputs": [
                     {
@@ -218,7 +218,11 @@ public function main() returns error? {
 
             }
         );
-        io:println(delete_response.statusCode, ": Item with ID: ", batchId, " deleted successfully");
+        if delete_response is error {
+            io:println(string `Error occurred while deleting item with ID: ${batchId} - ${delete_response.message()}`);
+            return;
+        }
+        io:println(": Item with ID: ", batchId, " deleted successfully");
     }
 
 }

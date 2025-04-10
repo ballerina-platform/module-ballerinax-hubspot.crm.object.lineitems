@@ -14,7 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/http;
 import ballerina/oauth2;
 import ballerina/os;
 import ballerina/test;
@@ -132,8 +131,8 @@ function testUpdateLineItemProperties() returns error? {
     enable: isLiveServer
 }
 function testDeleteLineItem() returns error? {
-    http:Response response = check hsLineItems->/[lineItemId].delete();
-    test:assertTrue(response.statusCode == 204);
+    error? response = check hsLineItems->/[lineItemId].delete();
+    test:assertTrue(response == ());
 }
 
 @test:Config {
@@ -271,7 +270,7 @@ function testSearchBatchofLineItems() returns error? {
     enable: isLiveServer
 }
 function testArchiveBatchLineItems() returns error? {
-    http:Response response = check hsLineItems->/batch/archive.post(
+    error? response = check hsLineItems->/batch/archive.post(
         payload = {
             "inputs": [
                 {
@@ -281,6 +280,6 @@ function testArchiveBatchLineItems() returns error? {
 
         }
     );
-    test:assertTrue(response.statusCode == 204);
+    test:assertTrue(response == ());
 }
 

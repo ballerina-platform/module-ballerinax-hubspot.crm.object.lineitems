@@ -330,7 +330,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "hubspot.crm.obj.lineitems"
-version = "1.0.0"
+version = "2.0.0"
 dependencies = [
 	{org = "ballerina", name = "data.jsondata"},
 	{org = "ballerina", name = "http"},

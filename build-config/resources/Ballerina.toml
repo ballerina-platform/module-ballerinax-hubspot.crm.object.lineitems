@@ -5,7 +5,7 @@ name = "hubspot.crm.obj.lineitems"
 version = "@toml.version@"
 license = ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = ["HubSpot", "CRM", "Object", "LineItems","API", "Inventory Management", "E-commerce"]
+keywords = ["Object", "LineItems", "API", "Inventory Management", "E-commerce", "Vendor/HubSpot", "Area/CRM", "Type/Connector"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.object.lineitems"
 
 [build-options]

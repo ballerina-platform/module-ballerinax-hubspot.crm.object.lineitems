@@ -1,8 +1,15 @@
 ## Overview
 
-[HubSpot](https://www.hubspot.com/our-story) is an AI-powered customer platform.
+[HubSpot](https://www.hubspot.com) is an AI-powered customer relationship management (CRM) platform.
 
-The `ballerinax/hubspot.crm.obj.lineitems` package offers APIs to connect and interact with the [HubSpot CRM Lineitems API](https://developers.hubspot.com/docs/reference/api/crm/objects/line-items) endpoints, specially based on [HubSpot REST API v3](https://developers.hubspot.com/docs/reference/api).
+The HubSpot CRM Line Items connector provides APIs to connect and interact with the [HubSpot CRM Line Items API](https://developers.hubspot.com/docs/reference/api/crm/objects/line-items) endpoints, specifically based on the [HubSpot REST API v3](https://developers.hubspot.com/docs/reference/api).
+
+### Key Features
+
+- Create, read, update, and delete line item records in HubSpot CRM
+- Associate line items with deals and other CRM objects
+- Manage line item properties such as price, quantity, and name
+- Batch operations for bulk line item management
 
 ## Setup guide
 
